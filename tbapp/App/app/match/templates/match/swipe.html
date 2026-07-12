@@ -1,0 +1,411 @@
+{% extends "base.html" %}
+
+{% block title %}Discover - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/match.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="swipe-container">
+    <div class="swipe-header">
+        <h1>Discover</h1>
+        <p>Swipe right to like, left to pass</p>
+    </div>
+
+    <!-- Swipe Controls -->
+    <div class="swipe-controls">
+        <div class="control-group">
+            <button class="btn-control btn-pass" id="btn-pass">
+                <i class="fas fa-times"></i>
+                <span>Pass</span>
+            </button>
+            <button class="btn-control btn-superlike" id="btn-superlike">
+                <i class="fas fa-star"></i>
+                <span>Super</span>
+            </button>
+            <button class="btn-control btn-like" id="btn-like">
+                <i class="fas fa-heart"></i>
+                <span>Like</span>
+            </button>
+        </div>
+
+        <div class="control-info">
+            <span class="superlike-count">
+                <i class="fas fa-star"></i>
+                3 Super Likes remaining
+            </span>
+            <span class="boost-available">
+                <i class="fas fa-bolt"></i>
+                Boost available
+            </span>
+        </div>
+    </div>
+
+    <!-- Swipe Cards Container -->
+    <div class="swipe-cards" id="swipe-cards">
+        <!-- Cards will be loaded dynamically -->
+
+        <!-- Sample swipe cards -->
+        <div class="swipe-card" data-user-id="1">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='img/avatars/emma.jpg') }}" alt="Emma">
+                <div class="card-overlay">
+                    <div class="user-info">0
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-details">
+                <div class="user-bio">
+                    <p>Adventure seeker and coffee lover. Looking for someone to explore the world with.</p>
+                </div>
+                <div class="user-interests">
+                    <span class="interest-tag">Travel</span>
+                    <span class="interest-tag">Coffee</span>
+                    <span class="interest-tag">Hiking</span>
+                    <span class="interest-tag">Photography</span>
+                </div>
+                <div class="user-stats">
+                    <div class="stat">
+                        <strong>5</strong>
+                        <span>miles away</span>
+                    </div>
+                    <div class="stat">
+                        <strong>89%</strong>
+                        <span>match</span>
+                    </div>
+                    <div class="stat">
+                        <strong>2h</strong>
+                        <span>ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swipe-card" data-user-id="2">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='img/avatars/michael.jpg') }}" alt="Michael">
+                <div class="card-overlay">
+                    <div class="user-info">
+                        <h2>Michael, 32</h2>
+                        <p class="user-location">San Francisco, CA</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-info" title="View profile">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-details">
+                <div class="user-bio">
+                    <p>Software engineer by day, chef by night. Let's create something delicious together.</p>
+                </div>
+                <div class="user-interests">
+                    <span class="interest-tag">Cooking</span>
+                    <span class="interest-tag">Technology</span>
+                    <span class="interest-tag">Movies</span>
+                    <span class="interest-tag">Fitness</span>
+                </div>
+                <div class="user-stats">
+                    <div class="stat">
+                        <strong>8</strong>
+                        <span>miles away</span>
+                    </div>
+                    <div class="stat">
+                        <strong>92%</strong>
+                        <span>match</span>
+                    </div>
+                    <div class="stat">
+                        <strong>5h</strong>
+                        <span>ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swipe-card" data-user-id="3">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='img/avatars/sophia.jpg') }}" alt="Sophia">
+                <div class="card-overlay">
+                    <div class="user-info">
+                        <h2>Sophia, 26</h2>
+                        <p class="user-location">Los Angeles, CA</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-info" title="View profile">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-details">
+                <div class="user-bio">
+                    <p>Artist and yoga instructor. Passionate about mindfulness and creative expression.</p>
+                </div>
+                <div class="user-interests">
+                    <span class="interest-tag">Art</span>
+                    <span class="interest-tag">Yoga</span>
+                    <span class="interest-tag">Meditation</span>
+                    <span class="interest-tag">Music</span>
+                </div>
+                <div class="user-stats">
+                    <div class="stat">
+                        <strong>3</strong>
+                        <span>miles away</span>
+                    </div>
+                    <div class="stat">
+                        <strong>85%</strong>
+                        <span>match</span>
+                    </div>
+                    <div class="stat">
+                        <strong>1h</strong>
+                        <span>ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swipe-card" data-user-id="4">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='img/avatars/james.jpg') }}" alt="James">
+                <div class="card-overlay">
+                    <div class="user-info">
+                        <h2>James, 30</h2>
+                        <p class="user-location">Chicago, IL</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-info" title="View profile">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-details">
+                <div class="user-bio">
+                    <p>Music producer and foodie. Always looking for new restaurants and concert venues.</p>
+                </div>
+                <div class="user-interests">
+                    <span class="interest-tag">Music</span>
+                    <span class="interest-tag">Food</span>
+                    <span class="interest-tag">Concerts</span>
+                    <span class="interest-tag">Travel</span>
+                </div>
+                <div class="user-stats">
+                    <div class="stat">
+                        <strong>7</strong>
+                        <span>miles away</span>
+                    </div>
+                    <div class="stat">
+                        <strong>78%</strong>
+                        <span>match</span>
+                    </div>
+                    <div class="stat">
+                        <strong>3h</strong>
+                        <span>ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swipe-card" data-user-id="5">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='img/avatars/olivia.jpg') }}" alt="Olivia">
+                <div class="card-overlay">
+                    <div class="user-info">
+                        <h2>Olivia, 27</h2>
+                        <p class="user-location">Seattle, WA</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-info" title="View profile">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-details">
+                <div class="user-bio">
+                    <p>Environmental scientist and outdoor enthusiast. Let's go on an adventure together!</p>
+                </div>
+                <div class="user-interests">
+                    <span class="interest-tag">Hiking</span>
+                    <span class="interest-tag">Environment</span>
+                    <span class="interest-tag">Camping</span>
+                    <span class="interest-tag">Photography</span>
+                </div>
+                <div class="user-stats">
+                    <div class="stat">
+                        <strong>10</strong>
+                        <span>miles away</span>
+                    </div>
+                    <div class="stat">
+                        <strong>94%</strong>
+                        <span>match</span>
+                    </div>
+                    <div class="stat">
+                        <strong>6h</strong>
+                        <span>ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swipe-card" data-user-id="6">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='img/avatars/david.jpg') }}" alt="David">
+                <div class="card-overlay">
+                    <div class="user-info">
+                        <h2>David, 31</h2>
+                        <p class="user-location">Austin, TX</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-info" title="View profile">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-details">
+                <div class="user-bio">
+                    <p>Musician and craft beer enthusiast. Looking for someone to share laughs and live music with.</p>
+                </div>
+                <div class="user-interests">
+                    <span class="interest-tag">Music</span>
+                    <span class="interest-tag">Craft Beer</span>
+                    <span class="interest-tag">Festivals</span>
+                    <span class="interest-tag">Comedy</span>
+                </div>
+                <div class="user-stats">
+                    <div class="stat">
+                        <strong>4</strong>
+                        <span>miles away</span>
+                    </div>
+                    <div class="stat">
+                        <strong>82%</strong>
+                        <span>match</span>
+                    </div>
+                    <div class="stat">
+                        <strong>4h</strong>
+                        <span>ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swipe-card" data-user-id="7">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='img/avatars/mia.jpg') }}" alt="Mia">
+                <div class="card-overlay">
+                    <div class="user-info">
+                        <h2>Mia, 25</h2>
+                        <p class="user-location">Miami, FL</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-info" title="View profile">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-details">
+                <div class="user-bio">
+                    <p>Marine biologist and beach lover. Passionate about ocean conservation and sunset cocktails.</p>
+                </div>
+                <div class="user-interests">
+                    <span class="interest-tag">Ocean</span>
+                    <span class="interest-tag">Swimming</span>
+                    <span class="interest-tag">Conservation</span>
+                    <span class="interest-tag">Dancing</span>
+                </div>
+                <div class="user-stats">
+                    <div class="stat">
+                        <strong>2</strong>
+                        <span>miles away</span>
+                    </div>
+                    <div class="stat">
+                        <strong>87%</strong>
+                        <span>match</span>
+                    </div>
+                    <div class="stat">
+                        <strong>30m</strong>
+                        <span>ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="empty-swipe" style="display: none;">
+        <div class="empty-icon">
+            <i class="fas fa-users"></i>
+        </div>
+        <h3>No more profiles to show</h3>
+        <p>Check back later for new matches or adjust your preferences.</p>
+        <div class="empty-actions">
+            <button class="btn btn-outline" id="refresh-profiles">
+                <i class="fas fa-sync"></i>
+                Refresh
+            </button>
+            <a href="{{ url_for('match.search') }}" class="btn btn-primary">
+                <i class="fas fa-sliders-h"></i>
+                Adjust Preferences
+            </a>
+        </div>
+    </div>
+
+    <!-- Boost Overlay -->
+    <div class="boost-overlay" id="boost-overlay">
+        <div class="boost-content">
+            <div class="boost-icon">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <h2>Boost Your Profile</h2>
+            <p>Get 10x more visibility for the next 30 minutes</p>
+            <button class="btn btn-primary">Use Boost</button>
+            <button class="btn btn-outline" id="close-boost">Not Now</button>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Modal -->
+<div class="modal" id="profile-modal">
+    <div class="modal-content profile-modal-content">
+        <div class="modal-header">
+            <h3>Profile Details</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Profile details will be loaded here -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" data-dismiss="modal">Close</button>
+            <button class="btn btn-primary">Like</button>
+            <button class="btn btn-danger">Super Like</button>
+        </div>
+    </div>
+</div>
+
+<!-- Match Modal -->
+<div class="modal" id="match-modal">
+    <div class="modal-content match-modal-content">
+        <div class="match-success">
+            <div class="match-heart">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h2>It's a Match!</h2>
+            <p>You and <span id="match-user-name">Emma</span> liked each other</p>
+            <div class="match-actions">
+                <button class="btn btn-outline" data-dismiss="modal">Keep Swiping</button>
+                <button class="btn btn-primary" id="send-message-btn">Send Message</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/hammer.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/match.js') }}"></script>
+{% endblock %}

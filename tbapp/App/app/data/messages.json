@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "sender_id": 1,
+    "receiver_id": 2,
+    "content": "Hey! I saw you're into photography too. Do you have any favorite spots in the city?",
+    "timestamp": "2024-01-15T10:30:00Z",
+    "is_read": true
+  },
+  {
+    "id": 2,
+    "sender_id": 2,
+    "receiver_id": 1,
+    "content": "Hi! Yes, I love the Golden Gate Bridge at sunset. What about you?",
+    "timestamp": "2024-01-15T10:45:00Z",
+    "is_read": true
+  },
+  {
+    "id": 3,
+    "sender_id": 1,
+    "receiver_id": 2,
+    "content": "That sounds amazing! I usually go to Central Park for sunrise shots. We should go shooting together sometime!",
+    "timestamp": "2024-01-15T11:00:00Z",
+    "is_read": true
+  },
+  {
+    "id": 4,
+    "sender_id": 3,
+    "receiver_id": 4,
+    "content": "Your yoga classes sound amazing! Do you teach beginners?",
+    "timestamp": "2024-01-14T15:20:00Z",
+    "is_read": false
+  },
+  {
+    "id": 5,
+    "sender_id": 5,
+    "receiver_id": 6,
+    "content": "I saw you're into rock climbing! I've been wanting to try it. Any recommendations for a beginner?",
+    "timestamp": "2024-01-14T09:15:00Z",
+    "is_read": true
+  },
+  {
+    "id": 6,
+    "sender_id": 6,
+    "receiver_id": 5,
+    "content": "Absolutely! I'd recommend starting with indoor climbing first. There's a great gym downtown!",
+    "timestamp": "2024-01-14T09:30:00Z",
+    "is_read": true
+  },
+  {
+    "id": 7,
+    "sender_id": 7,
+    "receiver_id": 8,
+    "content": "Your marathon training is so inspiring! I'm training for my first 5K. Any tips?",
+    "timestamp": "2024-01-13T16:45:00Z",
+    "is_read": true
+  },
+  {
+    "id": 8,
+    "sender_id": 8,
+    "receiver_id": 7,
+    "content": "That's awesome! Start slow and build up gradually. Consistency is key!",
+    "timestamp": "2024-01-13T17:00:00Z",
+    "is_read": true
+  },
+  {
+    "id": 9,
+    "sender_id": 9,
+    "receiver_id": 10,
+    "content": "I love your sustainable architecture work! Do you have any projects in Denver?",
+    "timestamp": "2024-01-12T14:20:00Z",
+    "is_read": false
+  },
+  {
+    "id": 10,
+    "sender_id": 10,
+    "receiver_id": 9,
+    "content": "Thanks! Yes, I'm working on a green building project downtown. Would love to show you around!",
+    "timestamp": "2024-01-12T14:35:00Z",
+    "is_read": true
+  }
+]

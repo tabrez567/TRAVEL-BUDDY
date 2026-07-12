@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Travel Buddy - Find Your Perfect Travel Companion{% endblock %}</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/notification-system.css') }}">
+    {% block styles %}{% endblock %}
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navigation -->
+    {% include 'includes/_navbar.html' %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    {% include 'includes/_footer.html' %}
+
+    <!-- Travel Assistant Button -->
+    <a href="{{ url_for('chatbot.chatbot') }}" id="chatbot-button" class="chatbot-button"
+        title="Chat with Travel Buddy AI Assistant">
+        <i class="fas fa-plane"></i>
+        <span class="chatbot-tooltip">Travel Assistant</span>
+    </a>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/matching.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/footer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/notification-system.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    {% block scripts %}{% endblock %}
+
+    <!-- Chatbot Button Animation and Theme Manager Initialization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set initial theme before DOM is fully loaded to prevent flash
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            // Initialize theme manager
+            ThemeManager.init();
+
+            const chatbotButton = document.getElementById('chatbot-button');
+
+            // Add pulse animation effect
+            if (chatbotButton) {
+                setTimeout(() => {
+                    chatbotButton.classList.add('pulse');
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+
+</html>

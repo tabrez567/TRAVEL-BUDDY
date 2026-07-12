@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Theme Test - Connectify{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 2rem;">
+    <h1>Theme Toggle Test</h1>
+    <p>This page tests the dark/light mode functionality.</p>
+    
+    <div class="card" style="padding: 1.5rem; margin: 1.5rem 0;">
+        <h3>Card Component</h3>
+        <p>This card should adapt to the current theme.</p>
+        <button class="btn btn-primary" onclick="NotificationSystem.show('This is a test notification', 'info')">Show Notification</button>
+    </div>
+    
+    <div style="margin: 1.5rem 0;">
+        <h3>Form Elements</h3>
+        <div class="form-group">
+            <label class="form-label">Input Field</label>
+            <input type="text" class="form-control" placeholder="Type something...">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Select Field</label>
+            <select class="form-control">
+                <option>Option 1</option>
+                <option>Option 2</option>
+                <option>Option 3</option>
+            </select>
+        </div>
+    </div>
+    
+    <div style="margin: 1.5rem 0;">
+        <h3>Buttons</h3>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-secondary">Secondary</button>
+            <button class="btn btn-success">Success</button>
+            <button class="btn btn-danger">Danger</button>
+            <button class="btn btn-warning">Warning</button>
+            <button class="btn btn-info">Info</button>
+        </div>
+    </div>
+    
+    <div style="margin: 1.5rem 0;">
+        <h3>Theme Toggle</h3>
+        <p>Current theme: <span id="current-theme">Loading...</span></p>
+        <button class="btn btn-primary" onclick="ThemeManager.toggleTheme()">Toggle Theme</button>
+        <button class="btn btn-secondary" onclick="testThemeToggle()">Test Theme Toggle</button>
+        <p id="debug-info" style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-secondary);"></p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function testThemeToggle() {
+        const debugInfo = document.getElementById('debug-info');
+        const themeBtn = document.getElementById('theme-toggle-btn');
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        
+        debugInfo.innerHTML = `
+            <strong>Debug Information:</strong><br>
+            Theme button found: ${themeBtn ? 'Yes' : 'No'}<br>
+            Current theme attribute: ${currentTheme}<br>
+            ThemeManager available: ${typeof ThemeManager !== 'undefined' ? 'Yes' : 'No'}<br>
+            Current theme from ThemeManager: ${typeof ThemeManager !== 'undefined' ? ThemeManager.getCurrentTheme() : 'N/A'}
+        `;
+        
+        if (themeBtn) {
+            console.log('Clicking theme button programmatically...');
+            themeBtn.click();
+        } else {
+            console.log('Theme button not found, calling ThemeManager.toggleTheme() directly...');
+            if (typeof ThemeManager !== 'undefined') {
+                ThemeManager.toggleTheme();
+            }
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update current theme display
+        const updateThemeDisplay = () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const themeElement = document.getElementById('current-theme');
+            if (themeElement) {
+                themeElement.textContent = currentTheme ? currentTheme.charAt(0).toUpperCase() + currentTheme.slice(1) : 'Unknown';
+            }
+        };
+        
+        // Update on page load
+        updateThemeDisplay();
+        
+        // Listen for theme changes
+        document.addEventListener('themeChanged', function(e) {
+            console.log('Theme changed event received:', e.detail);
+            updateThemeDisplay();
+        });
+        
+        // Also listen for manual attribute changes
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    console.log('Theme attribute changed to:', document.documentElement.getAttribute('data-theme'));
+                    updateThemeDisplay();
+                }
+            });
+        });
+        
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    });
+</script>
+{% endblock %}

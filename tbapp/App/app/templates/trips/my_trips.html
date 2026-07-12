@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}My Trips - Travel Buddy{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>My Trips</h2>
+                <a href="{{ url_for('trips.create_trip') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New Trip
+                </a>
+            </div>
+
+            <!-- My Created Trips -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Trips I'm Organizing</h5>
+                </div>
+                <div class="card-body">
+                    {% if user_trips %}
+                        <div class="row">
+                            {% for trip in user_trips %}
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ trip.title }}</h6>
+                                        <p class="card-text text-muted">{{ trip.destination }}</p>
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                {{ trip.start_date.strftime('%B %d, %Y') }} - 
+                                                {{ trip.end_date.strftime('%B %d, %Y') }}
+                                            </small>
+                                        </p>
+                                        <p class="card-text">
+                                            <span class="badge badge-{{ 'success' if trip.status == 'confirmed' else 'warning' }}">
+                                                {{ trip.status.title() }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="{{ url_for('trips.trip_details', trip_id=trip.id) }}" class="btn btn-sm btn-outline-primary">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">You haven't created any trips yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Trips I'm Participating In -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Trips I'm Joining</h5>
+                </div>
+                <div class="card-body">
+                    {% if participating_trips %}
+                        <div class="row">
+                            {% for trip in participating_trips %}
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ trip.title }}</h6>
+                                        <p class="card-text text-muted">{{ trip.destination }}</p>
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                {{ trip.start_date.strftime('%B %d, %Y') }} - 
+                                                {{ trip.end_date.strftime('%B %d, %Y') }}
+                                            </small>
+                                        </p>
+                                        <p class="card-text">
+                                            <span class="badge badge-{{ 'success' if trip.status == 'confirmed' else 'warning' }}">
+                                                {{ trip.status.title() }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="{{ url_for('trips.trip_details', trip_id=trip.id) }}" class="btn btn-sm btn-outline-primary">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">You're not participating in any trips yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

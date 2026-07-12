@@ -1,0 +1,497 @@
+{% extends "base.html" %}
+
+{% block title %}Payment - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/monetization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="payment-container">
+    <div class="payment-header">
+        <h1>Complete Your Purchase</h1>
+        <p>Review your order and enter payment details</p>
+    </div>
+
+    <div class="payment-content">
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            
+            <div class="summary-card">
+                <div class="summary-item">
+                    <span>Plan:</span>
+                    <span>Premium Membership</span>
+                </div>
+                <div class="summary-item">
+                    <span>Billing Cycle:</span>
+                    <span>Monthly</span>
+                </div>
+                <div class="summary-item">
+                    <span>Start Date:</span>
+                    <span>{{ now.strftime('%b %d, %Y') }}</span>
+                </div>
+                <div class="summary-item">
+                    <span>Next Billing:</span>
+                    <span>{{ (now + timedelta(days=30)).strftime('%b %d, %Y') }}</span>
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-item total">
+                    <span>Total Today:</span>
+                    <span>$19.99</span>
+                </div>
+            </div>
+
+            <!-- Features Included -->
+            <div class="features-included">
+                <h3>What's Included</h3>
+                <ul>
+                    <li><i class="fas fa-check"></i> Unlimited Likes</li>
+                    <li><i class="fas fa-check"></i> See Who Liked You</li>
+                    <li><i class="fas fa-check"></i> Unlimited Rewinds</li>
+                    <li><i class="fas fa-check"></i> 5 Super Likes per week</li>
+                    <li><i class="fas fa-check"></i> 1 Boost per month</li>
+                    <li><i class="fas fa-check"></i> Read Receipts</li>
+                    <li><i class="fas fa-check"></i> Advanced Filters</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="payment-form-section">
+            <h2>Payment Details</h2>
+            
+            <div class="payment-form-card">
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <div class="method-tabs">
+                        <button class="method-tab active" data-method="card">
+                            <i class="fas fa-credit-card"></i>
+                            Credit Card
+                        </button>
+                        <button class="method-tab" data-method="paypal">
+                            <i class="fab fa-paypal"></i>
+                            PayPal
+                        </button>
+                        <button class="method-tab" data-method="applepay">
+                            <i class="fab fa-apple-pay"></i>
+                            Apple Pay
+                        </button>
+                    </div>
+
+                    <!-- Card Form -->
+                    <div class="method-content active" id="card-content">
+                        <form id="payment-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="card-number">Card Number</label>
+                                    <input type="text" id="card-number" class="form-control" 
+                                           placeholder="1234 5678 9012 3456" maxlength="19" required>
+                                    <div class="card-icons">
+                                        <i class="fab fa-cc-visa"></i>
+                                        <i class="fab fa-cc-mastercard"></i>
+                                        <i class="fab fa-cc-amex"></i>
+                                        <i class="fab fa-cc-discover"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="expiry-date">Expiration Date</label>
+                                    <input type="text" id="expiry-date" class="form-control" 
+                                           placeholder="MM/YY" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input type="text" id="cvv" class="form-control" 
+                                           placeholder="123" maxlength="4" required>
+                                    <span class="cvv-help" title="3 digits on back of card">
+                                        <i class="fas fa-question-circle"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cardholder-name">Cardholder Name</label>
+                                <input type="text" id="cardholder-name" class="form-control" 
+                                       placeholder="John Doe" required>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="country">Country</label>
+                                    <select id="country" class="form-control" required>
+                                        <option value="">Select Country</option>
+                                        <option value="US">United States</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="UK">United Kingdom</option>
+                                        <option value="AU">Australia</option>
+                                        <!-- More countries -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="postal-code">Postal Code</label>
+                                    <input type="text" id="postal-code" class="form-control" 
+                                           placeholder="12345" required>
+                                </div>
+                            </div>
+
+                            <!-- Save Card Option -->
+                            <div class="form-check">
+                                <input type="checkbox" id="save-card" class="form-check-input">
+                                <label for="save-card" class="form-check-label">
+                                    Save this card for future payments
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- PayPal Content -->
+                    <div class="method-content" id="paypal-content">
+                        <div class="alternative-payment">
+                            <div class="payment-logo">
+                                <i class="fab fa-paypal fa-3x"></i>
+                            </div>
+                            <p>You will be redirected to PayPal to complete your payment securely.</p>
+                            <button class="btn btn-paypal" id="paypal-button">
+                                <i class="fab fa-paypal"></i>
+                                Continue with PayPal
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Apple Pay Content -->
+                    <div class="method-content" id="applepay-content">
+                        <div class="alternative-payment">
+                            <div class="payment-logo">
+                                <i class="fab fa-apple-pay fa-3x"></i>
+                            </div>
+                            <p>Complete your payment using Apple Pay for a fast and secure checkout.</p>
+                            <button class="btn btn-applepay" id="applepay-button">
+                                <i class="fab fa-apple-pay"></i>
+                                Pay with Apple Pay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Badge -->
+                <div class="security-badge">
+                    <div class="security-info">
+                        <i class="fas fa-lock"></i>
+                        <span>Secure SSL Encryption</span>
+                    </div>
+                    <div class="security-logos">
+                        <img src="{{ url_for('static', filename='img/payment/visa.png') }}" alt="Visa" height="20">
+                        <img src="{{ url_for('static', filename='img/payment/mastercard.png') }}" alt="Mastercard" height="20">
+                        <img src="{{ url_for('static', filename='img/payment/pci.png') }}" alt="PCI Compliant" height="20">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Billing Address -->
+            <div class="billing-address">
+                <h3>Billing Address</h3>
+                <div class="address-form">
+                    <div class="form-check">
+                        <input type="checkbox" id="same-as-profile" class="form-check-input" checked>
+                        <label for="same-as-profile" class="form-check-label">
+                            Use profile address
+                        </label>
+                    </div>
+
+                    <div id="custom-address" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Address Line 1</label>
+                                <input type="text" class="form-control" placeholder="Street address">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Address Line 2</label>
+                                <input type="text" class="form-control" placeholder="Apt, suite, etc.">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>City</label>
+                                <input type="text" class="form-control" placeholder="City">
+                            </div>
+                            <div class="form-group">
+                                <label>State</label>
+                                <select class="form-control">
+                                    <option value="">Select State</option>
+                                    <!-- States would be populated here -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>ZIP Code</label>
+                                <input type="text" class="form-control" placeholder="12345">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terms and Conditions -->
+            <div class="terms-section">
+                <div class="form-check">
+                    <input type="checkbox" id="accept-terms" class="form-check-input" required>
+                    <label for="accept-terms" class="form-check-label">
+                        I agree to the <a href="#terms">Terms of Service</a> and 
+                        <a href="#privacy">Privacy Policy</a>. I understand that my subscription will 
+                        automatically renew and I can cancel anytime.
+                    </label>
+                </div>
+            </div>
+
+            <!-- Payment Actions -->
+            <div class="payment-actions">
+                <a href="{{ url_for('monetization.plans') }}" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Plans
+                </a>
+                <button type="submit" form="payment-form" class="btn btn-primary btn-lg" id="submit-payment">
+                    <i class="fas fa-lock"></i>
+                    Complete Payment - $19.99
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Processing Modal -->
+<div class="modal" id="processing-modal">
+    <div class="modal-content">
+        <div class="modal-body text-center">
+            <div class="processing-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+            <h3>Processing Payment</h3>
+            <p>Please wait while we process your payment. This may take a moment.</p>
+            <div class="processing-details">
+                <p>Amount: <strong>$19.99</strong></p>
+                <p>Method: <strong id="processing-method">Credit Card</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal" id="success-modal">
+    <div class="modal-content">
+        <div class="modal-body text-center">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Payment Successful!</h3>
+            <p>Your Premium membership has been activated.</p>
+            <div class="success-details">
+                <p><strong>Premium Features Activated</strong></p>
+                <p>Subscription: <strong>Monthly</strong></p>
+                <p>Next billing: <strong>{{ (now + timedelta(days=30)).strftime('%b %d, %Y') }}</strong></p>
+            </div>
+            <div class="success-actions">
+                <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-primary">
+                    Go to Dashboard
+                </a>
+                <button class="btn btn-outline" data-dismiss="modal">
+                    Explore Features
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal" id="error-modal">
+    <div class="modal-content">
+        <div class="modal-body text-center">
+            <div class="error-icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <h3>Payment Failed</h3>
+            <p id="error-message">There was an issue processing your payment. Please try again.</p>
+            <div class="error-actions">
+                <button class="btn btn-primary" data-dismiss="modal">
+                    Try Again
+                </button>
+                <button class="btn btn-outline" onclick="showSupport()">
+                    Contact Support
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/monetization.js') }}"></script>
+<script>
+// Payment specific functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Payment method tabs
+    const methodTabs = document.querySelectorAll('.method-tab');
+    const methodContents = document.querySelectorAll('.method-content');
+
+    methodTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const method = this.dataset.method;
+            
+            // Update tabs
+            methodTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Update contents
+            methodContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === method + '-content') {
+                    content.classList.add('active');
+                }
+            });
+            
+            // Update processing method display
+            document.getElementById('processing-method').textContent = 
+                this.textContent.trim();
+        });
+    });
+
+    // Card number formatting
+    const cardNumberInput = document.getElementById('card-number');
+    if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 16) value = value.slice(0, 16);
+            
+            // Add spaces every 4 digits
+            value = value.replace(/(\d{4})/g, '$1 ').trim();
+            e.target.value = value;
+        });
+    }
+
+    // Expiration date formatting
+    const expDateInput = document.getElementById('expiry-date');
+    if (expDateInput) {
+        expDateInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 4) value = value.slice(0, 4);
+            
+            if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2);
+            }
+            e.target.value = value;
+        });
+    }
+
+    // Address toggle
+    const sameAsProfile = document.getElementById('same-as-profile');
+    const customAddress = document.getElementById('custom-address');
+
+    if (sameAsProfile && customAddress) {
+        sameAsProfile.addEventListener('change', function() {
+            customAddress.style.display = this.checked ? 'none' : 'block';
+        });
+    }
+
+    // Form submission
+    const paymentForm = document.getElementById('payment-form');
+    const submitButton = document.getElementById('submit-payment');
+
+    if (paymentForm && submitButton) {
+        paymentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            processPayment();
+        });
+    }
+
+    // PayPal button
+    const paypalButton = document.getElementById('paypal-button');
+    if (paypalButton) {
+        paypalButton.addEventListener('click', function() {
+            processPayPalPayment();
+        });
+    }
+
+    // Apple Pay button
+    const applepayButton = document.getElementById('applepay-button');
+    if (applepayButton) {
+        applepayButton.addEventListener('click', function() {
+            processApplePayPayment();
+        });
+    }
+});
+
+function processPayment() {
+    const submitButton = document.getElementById('submit-payment');
+    const processingModal = document.getElementById('processing-modal');
+    
+    // Show processing modal
+    processingModal.style.display = 'flex';
+    
+    // Simulate payment processing
+    setTimeout(() => {
+        // Randomly succeed or fail for demo purposes
+        if (Math.random() > 0.2) {
+            showSuccess();
+        } else {
+            showError('Your card was declined. Please try another payment method.');
+        }
+        
+        processingModal.style.display = 'none';
+    }, 3000);
+}
+
+function processPayPalPayment() {
+    const processingModal = document.getElementById('processing-modal');
+    processingModal.style.display = 'flex';
+    
+    // Simulate PayPal redirect
+    setTimeout(() => {
+        showSuccess();
+        processingModal.style.display = 'none';
+    }, 2000);
+}
+
+function processApplePayPayment() {
+    const processingModal = document.getElementById('processing-modal');
+    processingModal.style.display = 'flex';
+    
+    // Simulate Apple Pay processing
+    setTimeout(() => {
+        showSuccess();
+        processingModal.style.display = 'none';
+    }, 1500);
+}
+
+function showSuccess() {
+    document.getElementById('success-modal').style.display = 'flex';
+}
+
+function showError(message) {
+    document.getElementById('error-message').textContent = message;
+    document.getElementById('error-modal').style.display = 'flex';
+}
+
+function showSupport() {
+    // In a real app, this would open a support chat or email
+    alert('Please contact support at support@connectify.com');
+}
+
+// Close modals
+document.querySelectorAll('.modal-close, [data-dismiss="modal"]').forEach(btn => {
+    btn.addEventListener('click', function() {
+        this.closest('.modal').style.display = 'none';
+    });
+});
+
+// Terms and privacy links
+document.querySelectorAll('a[href="#terms"], a[href="#privacy"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Terms and Privacy policy would be shown here.');
+    });
+});
+</script>
+{% endblock %}

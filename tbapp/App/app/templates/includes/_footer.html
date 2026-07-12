@@ -1,0 +1,239 @@
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-container">
+        <!-- Main Footer Content -->
+        <div class="footer-content">
+            <!-- Brand Section -->
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <img src="{{ url_for('static', filename='img/travel_buddy_logo_new.png') }}" alt="Travel Buddy"
+                        class="footer-logo-img">
+                    <span class="footer-brand-text">Travel Buddy</span>
+                </div>
+                <p class="footer-description">
+                    The modern way to find travel companions. Join millions of travelers finding adventure, friendship,
+                    and unforgettable journeys together.
+                </p>
+
+                <!-- Newsletter Signup -->
+                <div class="newsletter-signup">
+                    <h5 class="newsletter-title">Stay Connected</h5>
+                    <p class="newsletter-description">Get the latest updates and travel tips delivered to your inbox.
+                    </p>
+                    <form class="newsletter-form" id="newsletter-form">
+                        <div class="newsletter-input-group">
+                            <input type="email" class="newsletter-input" placeholder="Enter your email" required>
+                            <button type="submit" class="newsletter-btn">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Subscribe</span>
+                            </button>
+                        </div>
+                        <div class="newsletter-message" id="newsletter-message"></div>
+                    </form>
+                </div>
+
+                <!-- Social Links -->
+                <div class="social-links">
+                    <a href="https://facebook.com" class="social-link" aria-label="Facebook" target="_blank"
+                        rel="noopener">
+                        <i class="fab fa-facebook-f"></i>
+                        <span class="social-tooltip">Follow us on Facebook</span>
+                    </a>
+                    <a href="https://twitter.com" class="social-link" aria-label="Twitter" target="_blank"
+                        rel="noopener">
+                        <i class="fab fa-twitter"></i>
+                        <span class="social-tooltip">Follow us on Twitter</span>
+                    </a>
+                    <a href="https://www.instagram.com/ft.tabrezz?igsh=MTJlc2F3bmFiejJyag==" class="social-link"
+                        aria-label="Instagram" target="_blank" rel="noopener">
+                        <i class="fab fa-instagram"></i>
+                        <span class="social-tooltip">Follow us on Instagram</span>
+                    </a>
+                    <a href="https://linkedin.com" class="social-link" aria-label="LinkedIn" target="_blank"
+                        rel="noopener">
+                        <i class="fab fa-linkedin-in"></i>
+                        <span class="social-tooltip">Connect on LinkedIn</span>
+                    </a>
+                    <a href="https://youtube.com" class="social-link" aria-label="YouTube" target="_blank"
+                        rel="noopener">
+                        <i class="fab fa-youtube"></i>
+                        <span class="social-tooltip">Subscribe on YouTube</span>
+                    </a>
+                    <a href="https://tiktok.com" class="social-link" aria-label="TikTok" target="_blank" rel="noopener">
+                        <i class="fab fa-tiktok"></i>
+                        <span class="social-tooltip">Follow us on TikTok</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Links Sections -->
+            <div class="footer-links">
+                <!-- Product Links -->
+                <div class="footer-column">
+                    <h4 class="footer-title">
+                        <i class="fas fa-heart"></i>
+                        Product
+                    </h4>
+                    <ul class="footer-list">
+                        <li><a href="{{ url_for('match.swipe') }}" class="footer-link">Find Travel Buddies</a></li>
+                        <li><a href="{{ url_for('chat.chat') }}" class="footer-link">Messages</a></li>
+                        <li><a href="{{ url_for('trips.search_trips') }}" class="footer-link">Discover Trips</a></li>
+                        <li><a href="{{ url_for('monetization.plans') }}" class="footer-link">Premium Features</a></li>
+                        <li><a href="{{ url_for('profile.profile') }}" class="footer-link">Profile Builder</a></li>
+                        <li><a href="{{ url_for('dashboard.dashboard') }}" class="footer-link">Travel Analytics</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company Links -->
+                <div class="footer-column">
+                    <h4 class="footer-title">
+                        <i class="fas fa-building"></i>
+                        Company
+                    </h4>
+                    <ul class="footer-list">
+                        <li><a href="#" class="footer-link">About Us</a></li>
+                        <li><a href="#" class="footer-link">Our Story</a></li>
+                        <li><a href="#" class="footer-link">Careers</a></li>
+                        <li><a href="#" class="footer-link">Press Kit</a></li>
+                        <li><a href="#" class="footer-link">Blog</a></li>
+                        <li><a href="#" class="footer-link">Success Stories</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support Links -->
+                <div class="footer-column">
+                    <h4 class="footer-title">
+                        <i class="fas fa-life-ring"></i>
+                        Support
+                    </h4>
+                    <ul class="footer-list">
+                        <li><a href="#" class="footer-link">Help Center</a></li>
+                        <li><a href="#" class="footer-link">Contact Support</a></li>
+                        <li><a href="#" class="footer-link">Safety Center</a></li>
+                        <li><a href="#" class="footer-link">Community Guidelines</a></li>
+                        <li><a href="#" class="footer-link">Report User</a></li>
+                        <li><a href="#" class="footer-link">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal Links -->
+                <div class="footer-column">
+                    <h4 class="footer-title">
+                        <i class="fas fa-balance-scale"></i>
+                        Legal
+                    </h4>
+                    <ul class="footer-list">
+                        <li><a href="#" class="footer-link">Terms of Service</a></li>
+                        <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="#" class="footer-link">Cookie Policy</a></li>
+                        <li><a href="#" class="footer-link">GDPR Compliance</a></li>
+                        <li><a href="#" class="footer-link">Refund Policy</a></li>
+                        <li><a href="#" class="footer-link">Accessibility</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources Links -->
+                <div class="footer-column">
+                    <h4 class="footer-title">
+                        <i class="fas fa-book"></i>
+                        Resources
+                    </h4>
+                    <ul class="footer-list">
+                        <li><a href="#" class="footer-link">Travel Tips</a></li>
+                        <li><a href="#" class="footer-link">Safety Tips</a></li>
+                        <li><a href="#" class="footer-link">Profile Guide</a></li>
+                        <li><a href="#" class="footer-link">Travel Stories</a></li>
+                        <li><a href="#" class="footer-link">Travel Blog</a></li>
+                        <li><a href="#" class="footer-link">Video Tutorials</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="footer-stats">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number">2M+</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50K+</div>
+                    <div class="stat-label">Success Stories</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">190+</div>
+                    <div class="stat-label">Countries</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4.8★</div>
+                    <div class="stat-label">App Rating</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <div class="footer-bottom-left">
+                    <div class="footer-copyright">
+                        <p>&copy; 2024 Connectify. All rights reserved.</p>
+                        <p class="footer-tagline">Where meaningful connections begin 💕</p>
+                    </div>
+
+                    <div class="footer-bottom-links">
+                        <a href="#" class="footer-bottom-link">Accessibility</a>
+                        <span class="footer-separator">•</span>
+                        <a href="#" class="footer-bottom-link">Sitemap</a>
+                        <span class="footer-separator">•</span>
+                        <a href="#" class="footer-bottom-link">Language</a>
+                        <span class="footer-separator">•</span>
+                        <a href="#" class="footer-bottom-link">Mobile App</a>
+                    </div>
+                </div>
+
+                <div class="footer-bottom-right">
+                    <div class="footer-badges">
+                        <div class="badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Secure</span>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-lock"></i>
+                            <span>Private</span>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-heart"></i>
+                            <span>Trusted</span>
+                        </div>
+                    </div>
+
+                    <div class="footer-download">
+                        <p class="download-text">Download our mobile app</p>
+                        <div class="download-buttons">
+                            <a href="#" class="download-btn app-store">
+                                <i class="fab fa-apple"></i>
+                                <div class="download-text">
+                                    <span class="download-label">Download on the</span>
+                                    <span class="download-store">App Store</span>
+                                </div>
+                            </a>
+                            <a href="#" class="download-btn google-play">
+                                <i class="fab fa-google-play"></i>
+                                <div class="download-text">
+                                    <span class="download-label">Get it on</span>
+                                    <span class="download-store">Google Play</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+</footer>

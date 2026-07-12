@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Travel Buddy{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Travel Buddy" class="auth-logo">
+                <h1>Welcome back</h1>
+                <p>Sign in to continue your travel adventures</p>
+            </div>
+
+            <!-- Flash Messages Handler -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}" data-auth-error="{% if category == 'danger' %}password_error{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('auth.login') }}" class="auth-form">
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email"
+                        required>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <label for="password" class="form-label">Password</label>
+                        <a href="{{ url_for('auth.reset_password') }}" class="forgot-link">Forgot password?</a>
+                    </div>
+                    <input type="password" id="password" name="password" class="form-control"
+                        placeholder="Enter your password" required>
+                    <div class="invalid-feedback"></div>
+                    <button type="button" class="password-toggle" id="password-toggle">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="form-group remember-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="remember" id="remember">
+                        <span class="checkmark"></span>
+                        Remember me
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg auth-btn">Sign In</button>
+            </form>
+
+            <div class="auth-divider">
+                <span>or continue with</span>
+            </div>
+
+            <div class="social-login">
+                <div class="social-login-text">or continue with</div>
+                <div class="social-buttons">
+                    <a href="{{ url_for('auth.oauth_authorize', provider='google') }}" class="social-btn google" aria-label="Sign in with Google" title="Sign in with Google">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a href="{{ url_for('auth.oauth_authorize', provider='facebook') }}" class="social-btn facebook" aria-label="Sign in with Facebook" title="Sign in with Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="{{ url_for('auth.oauth_authorize', provider='twitter') }}" class="social-btn twitter" aria-label="Sign in with Twitter" title="Sign in with Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="{{ url_for('auth.signup') }}">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-hero">
+        <div class="hero-content">
+            <h2>Find Your Perfect Travel Partner</h2>
+            <p>Join thousands of travelers finding adventure companions on Travel Buddy</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <h3>10K+</h3>
+                    <span>Active Travelers</span>
+                </div>
+                <div class="stat">
+                    <h3>1K+</h3>
+                    <span>Successful Trips</span>
+                </div>
+                <div class="stat">
+                    <h3>50+</h3>
+                    <span>Countries</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script>
+    // Global function to display wrong password error (can be called by backend)
+    window.showWrongPasswordError = function() {
+        const passwordField = document.getElementById('password');
+        if (!passwordField) return;
+
+        const formGroup = passwordField.closest('.form-group');
+        let feedback = formGroup.querySelector('.invalid-feedback');
+
+        if (feedback) {
+            feedback.remove();
+        }
+
+        feedback = document.createElement('div');
+        feedback.className = 'invalid-feedback password-error';
+        feedback.textContent = 'You\'ve entered the wrong password.';
+        formGroup.appendChild(feedback);
+
+        passwordField.classList.add('is-invalid');
+        passwordField.style.animation = 'shake 0.5s ease-in-out';
+        setTimeout(() => {
+            passwordField.style.animation = '';
+        }, 500);
+
+        // Auto-focus password field
+        passwordField.focus();
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize AuthManager
+        if (typeof AuthManager !== 'undefined') {
+            AuthManager.init();
+        }
+
+        // Handle Flask flash messages with wrong password error
+        function handleFlashMessages() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            if (flashMessages.length > 0) {
+                flashMessages.forEach(flash => {
+                    const message = flash.textContent.trim();
+                    
+                    // If it's a danger message containing "check your login details"
+                    if (flash.classList.contains('flash-danger') && 
+                        (message.includes('check your login details') || 
+                         message.includes('password') || 
+                         message.includes('incorrect'))) {
+                        
+                        // Hide the flash message
+                        flash.style.display = 'none';
+                        
+                        // Show error on password field instead
+                        showPasswordError('You\'ve entered the wrong password.');
+                    }
+                });
+            }
+        }
+
+        // Password toggle functionality
+        const passwordToggle = document.getElementById('password-toggle');
+        const passwordInput = document.getElementById('password');
+
+        if (passwordToggle && passwordInput) {
+            passwordToggle.addEventListener('click', function () {
+                const type = passwordInput.type === 'password' ? 'text' : 'password';
+                passwordInput.type = type;
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+        }
+
+        // Form validation
+        const form = document.querySelector('.auth-form');
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                let isValid = true;
+
+                // Email validation
+                const email = document.getElementById('email');
+                if (!email.value || !email.value.includes('@')) {
+                    showError(email, 'Please enter a valid email address');
+                    isValid = false;
+                } else {
+                    clearError(email);
+                }
+
+                // Password validation
+                const password = document.getElementById('password');
+                if (!password.value || password.value.length < 6) {
+                    showError(password, 'Password must be at least 6 characters');
+                    isValid = false;
+                } else {
+                    clearError(password);
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+
+            // Clear password error when user starts typing
+            const passwordInput = document.getElementById('password');
+            if (passwordInput) {
+                passwordInput.addEventListener('input', function() {
+                    clearPasswordError();
+                });
+            }
+        }
+
+        // Display password error with enhanced styling
+        function showPasswordError(message) {
+            const passwordField = document.getElementById('password');
+            if (!passwordField) return;
+
+            const formGroup = passwordField.closest('.form-group');
+            let feedback = formGroup.querySelector('.invalid-feedback');
+
+            // Remove existing error if any
+            if (feedback) {
+                feedback.remove();
+            }
+
+            // Create and display new error
+            feedback = document.createElement('div');
+            feedback.className = 'invalid-feedback password-error';
+            feedback.textContent = message;
+            formGroup.appendChild(feedback);
+
+            // Add invalid class to input
+            passwordField.classList.add('is-invalid');
+
+            // Add shake animation
+            passwordField.style.animation = 'shake 0.5s ease-in-out';
+            setTimeout(() => {
+                passwordField.style.animation = '';
+            }, 500);
+
+            // Auto-focus password field
+            passwordField.focus();
+        }
+
+        // Clear password-specific error
+        function clearPasswordError() {
+            const passwordField = document.getElementById('password');
+            if (!passwordField) return;
+
+            const formGroup = passwordField.closest('.form-group');
+            const feedback = formGroup.querySelector('.invalid-feedback.password-error');
+
+            if (feedback) {
+                feedback.style.opacity = '0';
+                feedback.style.transform = 'translateY(-5px)';
+                setTimeout(() => {
+                    if (feedback && feedback.parentNode) {
+                        feedback.remove();
+                    }
+                }, 200);
+            }
+
+            passwordField.classList.remove('is-invalid');
+        }
+
+        function showError(input, message) {
+            const formGroup = input.closest('.form-group');
+            let feedback = formGroup.querySelector('.invalid-feedback');
+
+            if (!feedback) {
+                feedback = document.createElement('div');
+                feedback.className = 'invalid-feedback';
+                formGroup.appendChild(feedback);
+            }
+
+            feedback.textContent = message;
+            input.classList.add('is-invalid');
+        }
+
+        function clearError(input) {
+            const formGroup = input.closest('.form-group');
+            const feedback = formGroup.querySelector('.invalid-feedback');
+
+            if (feedback) {
+                feedback.remove();
+            }
+
+            input.classList.remove('is-invalid');
+        }
+
+        // Check for authentication errors on page load
+        handleFlashMessages();
+    });
+</script>
+{% endblock %}

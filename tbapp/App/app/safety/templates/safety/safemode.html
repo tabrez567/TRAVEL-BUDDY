@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}Safe Mode - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/safety.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="safety-container">
+    <div class="safety-header">
+        <h1>Safe Mode</h1>
+        <p>Enhanced safety features to protect your dating experience</p>
+    </div>
+
+    <div class="safemode-content">
+        <!-- Safe Mode Status -->
+        <div class="safemode-status">
+            <div class="status-card">
+                <div class="status-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="status-info">
+                    <h3>Safe Mode</h3>
+                    <p class="status-active">Currently Active</p>
+                    <span class="status-description">Your account is protected by enhanced safety features</span>
+                </div>
+                <label class="switch large">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Safety Features -->
+        <div class="safety-features">
+            <h2>Safety Features</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <h4>Content Filtering</h4>
+                    <p>Automatically filter inappropriate messages and images</p>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h4>Profile Verification</h4>
+                    <p>Only show verified profiles in your matches</p>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-location-slash"></i>
+                    </div>
+                    <h4>Location Privacy</h4>
+                    <p>Hide your exact location from other users</p>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <h4>Auto-Block</h4>
+                    <p>Automatically block users who violate community guidelines</p>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Features -->
+        <div class="emergency-features">
+            <h2>Emergency Features</h2>
+            
+            <div class="emergency-cards">
+                <div class="emergency-card">
+                    <div class="emergency-icon">
+                        <i class="fas fa-life-ring"></i>
+                    </div>
+                    <div class="emergency-content">
+                        <h4>Emergency Contact</h4>
+                        <p>Add trusted contacts for emergency situations</p>
+                        <button class="btn btn-outline">Manage Contacts</button>
+                    </div>
+                </div>
+
+                <div class="emergency-card">
+                    <div class="emergency-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="emergency-content">
+                        <h4>Quick Report</h4>
+                        <p>Instantly report suspicious behavior or emergencies</p>
+                        <button class="btn btn-outline">Setup Quick Report</button>
+                    </div>
+                </div>
+
+                <div class="emergency-card">
+                    <div class="emergency-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="emergency-content">
+                        <h4>Location Sharing</h4>
+                        <p>Share your location with trusted contacts during dates</p>
+                        <button class="btn btn-outline">Configure Sharing</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Resources -->
+        <div class="safety-resources">
+            <h2>Safety Resources</h2>
+            
+            <div class="resources-list">
+                <div class="resource-item">
+                    <i class="fas fa-book"></i>
+                    <div class="resource-content">
+                        <h4>Dating Safety Guide</h4>
+                        <p>Comprehensive guide to staying safe while dating online</p>
+                        <a href="#" class="btn-link">Read Guide</a>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <div class="resource-content">
+                        <h4>24/7 Support</h4>
+                        <p>Contact our safety team anytime for assistance</p>
+                        <a href="#" class="btn-link">Contact Support</a>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <i class="fas fa-shield-virus"></i>
+                    <div class="resource-content">
+                        <h4>Community Guidelines</h4>
+                        <p>Learn about our community standards and policies</p>
+                        <a href="#" class="btn-link">View Guidelines</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Statistics -->
+        <div class="safety-stats">
+            <h2>Safety Statistics</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Inappropriate messages blocked</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-number">24h</div>
+                    <div class="stat-label">Average response time for reports</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-number">1,234</div>
+                    <div class="stat-label">Fake profiles removed this month</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-number">99.9%</div>
+                    <div class="stat-label">Verified user profiles</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Emergency Contact Modal -->
+<div class="modal" id="emergency-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Emergency Contacts</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="emergency-contacts-list">
+                <div class="contact-item">
+                    <div class="contact-info">
+                        <h4>Sarah Johnson</h4>
+                        <p>+1 (555) 123-4567</p>
+                        <span class="contact-relation">Sister</span>
+                    </div>
+                    <div class="contact-actions">
+                        <button class="icon-btn"><i class="fas fa-edit"></i></button>
+                        <button class="icon-btn"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-info">
+                        <h4>Mike Chen</h4>
+                        <p>+1 (555) 987-6543</p>
+                        <span class="contact-relation">Friend</span>
+                    </div>
+                    <div class="contact-actions">
+                        <button class="icon-btn"><i class="fas fa-edit"></i></button>
+                        <button class="icon-btn"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="add-contact-form">
+                <h4>Add New Contact</h4>
+                <div class="form-grid">
+                    <input type="text" placeholder="Name" class="form-control">
+                    <input type="tel" placeholder="Phone Number" class="form-control">
+                    <input type="text" placeholder="Relation" class="form-control">
+                    <button class="btn btn-primary">Add Contact</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/safety.js') }}"></script>
+<script>
+// Safe mode specific functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle safe mode
+    const safeModeToggle = document.querySelector('.safemode-status .switch input');
+    if (safeModeToggle) {
+        safeModeToggle.addEventListener('change', function() {
+            const status = this.checked ? 'enabled' : 'disabled';
+            NotificationSystem.show(`Safe mode ${status}`, 'success');
+            
+            // Enable/disable all safety features
+            document.querySelectorAll('.features-grid .switch input').forEach(toggle => {
+                toggle.checked = this.checked;
+                toggle.disabled = !this.checked;
+            });
+        });
+    }
+    
+    // Emergency contact modal
+    document.querySelector('[href="#"], .btn-outline').forEach(btn => {
+        if (btn.textContent.includes('Contact')) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('emergency-modal').style.display = 'flex';
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Successful - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/monetization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="payment-success-container">
+    <div class="success-card">
+        <!-- Success Checkmark -->
+        <div class="success-checkmark">
+            <i class="fas fa-check"></i>
+        </div>
+        
+        <!-- Success Message -->
+        <h1 class="success-title">Payment Successful!</h1>
+        <p class="success-subtitle">Welcome to Connectify Premium! Your subscription is now active.</p>
+        
+        <!-- Subscription Details -->
+        <div class="subscription-details">
+            <h3><i class="fas fa-crown"></i> Subscription Details</h3>
+            <div class="detail-row">
+                <span>Plan:</span>
+                <span id="plan-name">Premium Membership</span>
+            </div>
+            <div class="detail-row">
+                <span>Billing Cycle:</span>
+                <span id="billing-cycle">Monthly</span>
+            </div>
+            <div class="detail-row">
+                <span>Amount Paid:</span>
+                <span id="amount-paid">$19.99</span>
+            </div>
+            <div class="detail-row">
+                <span>Next Billing Date:</span>
+                <span id="next-billing">{{ (now + timedelta(days=30)).strftime('%B %d, %Y') }}</span>
+            </div>
+            <div class="detail-row">
+                <span>Transaction ID:</span>
+                <span id="transaction-id">#TXN-{{ now.strftime('%Y%m%d%H%M%S') }}</span>
+            </div>
+        </div>
+        
+        <!-- Premium Features Activated -->
+        <div class="success-features">
+            <h4><i class="fas fa-star"></i> Premium Features Now Active</h4>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-heart"></i>
+                    <span>Unlimited Likes</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-eye"></i>
+                    <span>See Who Liked You</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-undo"></i>
+                    <span>Unlimited Rewinds</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-star"></i>
+                    <span>5 Super Likes/week</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-rocket"></i>
+                    <span>1 Boost/month</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-double"></i>
+                    <span>Read Receipts</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-filter"></i>
+                    <span>Advanced Filters</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-crown"></i>
+                    <span>Premium Badge</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Call to Action Buttons -->
+        <div class="success-cta">
+            <a href="{{ url_for('discover.discover_page') }}" class="btn btn-primary">
+                <i class="fas fa-search"></i>
+                Start Discovering
+            </a>
+            <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-outline">
+                <i class="fas fa-tachometer-alt"></i>
+                Go to Dashboard
+            </a>
+        </div>
+        
+        <!-- Additional Information -->
+        <div class="payment-footer">
+            <p class="small-text">
+                <i class="fas fa-info-circle"></i>
+                You will receive a confirmation email shortly. You can manage your subscription 
+                in your <a href="{{ url_for('dashboard.settings') }}">account settings</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Confetti Animation -->
+<div class="confetti-container" id="confetti-container"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get URL parameters to populate dynamic content
+    const urlParams = new URLSearchParams(window.location.search);
+    const plan = urlParams.get('plan') || 'premium';
+    const billing = urlParams.get('billing') || 'monthly';
+    const amount = urlParams.get('amount') || '19.99';
+    
+    // Update content based on parameters
+    updateSuccessPageContent(plan, billing, amount);
+    
+    // Create confetti effect
+    createConfetti();
+    
+    // Add celebration sound effect (optional)
+    playSuccessSound();
+    
+    // Auto-redirect after 30 seconds (optional)
+    setTimeout(() => {
+        showAutoRedirectNotification();
+    }, 25000);
+});
+
+function updateSuccessPageContent(plan, billing, amount) {
+    // Plan names mapping
+    const planNames = {
+        'basic': 'Basic Plan',
+        'premium': 'Premium Membership',
+        'vip': 'VIP Membership'
+    };
+    
+    // Update plan name
+    const planNameEl = document.getElementById('plan-name');
+    if (planNameEl) {
+        planNameEl.textContent = planNames[plan] || 'Premium Membership';
+    }
+    
+    // Update billing cycle
+    const billingCycleEl = document.getElementById('billing-cycle');
+    if (billingCycleEl) {
+        billingCycleEl.textContent = billing === 'annual' ? 'Annual' : 'Monthly';
+    }
+    
+    // Update amount
+    const amountEl = document.getElementById('amount-paid');
+    if (amountEl) {
+        amountEl.textContent = `$${amount}`;
+    }
+    
+    // Update next billing date
+    const nextBillingEl = document.getElementById('next-billing');
+    if (nextBillingEl && billing === 'annual') {
+        const nextYear = new Date();
+        nextYear.setFullYear(nextYear.getFullYear() + 1);
+        nextBillingEl.textContent = nextYear.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });\n    }\n}\n\nfunction createConfetti() {\n    const confettiContainer = document.getElementById('confetti-container');\n    if (!confettiContainer) return;\n    \n    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7'];\n    const confettiCount = 100;\n    \n    for (let i = 0; i < confettiCount; i++) {\n        setTimeout(() => {\n            createConfettiPiece(confettiContainer, colors);\n        }, i * 50);\n    }\n}\n\nfunction createConfettiPiece(container, colors) {\n    const confetti = document.createElement('div');\n    confetti.style.position = 'fixed';\n    confetti.style.top = '-10px';\n    confetti.style.left = Math.random() * window.innerWidth + 'px';\n    confetti.style.width = '10px';\n    confetti.style.height = '10px';\n    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];\n    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';\n    confetti.style.pointerEvents = 'none';\n    confetti.style.zIndex = '9999';\n    confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s linear forwards`;\n    \n    container.appendChild(confetti);\n    \n    // Remove confetti after animation\n    setTimeout(() => {\n        if (confetti.parentNode) {\n            confetti.parentNode.removeChild(confetti);\n        }\n    }, 5000);\n}\n\nfunction playSuccessSound() {\n    // Create a simple success sound using Web Audio API\n    if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {\n        try {\n            const audioContext = new (AudioContext || webkitAudioContext)();\n            const oscillator = audioContext.createOscillator();\n            const gainNode = audioContext.createGain();\n            \n            oscillator.connect(gainNode);\n            gainNode.connect(audioContext.destination);\n            \n            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);\n            oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.1);\n            oscillator.frequency.setValueAtTime(1200, audioContext.currentTime + 0.2);\n            \n            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);\n            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);\n            \n            oscillator.start(audioContext.currentTime);\n            oscillator.stop(audioContext.currentTime + 0.3);\n        } catch (e) {\n            // Ignore audio errors\n            console.log('Audio not supported');\n        }\n    }\n}\n\nfunction showAutoRedirectNotification() {\n    // Create a subtle notification about auto-redirect\n    const notification = document.createElement('div');\n    notification.style.position = 'fixed';\n    notification.style.bottom = '20px';\n    notification.style.right = '20px';\n    notification.style.background = 'rgba(0, 0, 0, 0.8)';\n    notification.style.color = 'white';\n    notification.style.padding = '15px';\n    notification.style.borderRadius = '8px';\n    notification.style.zIndex = '10000';\n    notification.style.fontSize = '14px';\n    notification.innerHTML = `\n        <div style=\"display: flex; align-items: center; gap: 10px;\">\n            <i class=\"fas fa-info-circle\"></i>\n            <span>Redirecting to dashboard in 5 seconds...</span>\n            <button onclick=\"this.parentNode.parentNode.remove()\" style=\"background: none; border: none; color: white; margin-left: 10px; cursor: pointer;\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n    `;\n    \n    document.body.appendChild(notification);\n    \n    // Auto redirect after 5 seconds\n    setTimeout(() => {\n        window.location.href = \"{{ url_for('dashboard.dashboard') }}\";\n    }, 5000);\n}\n\n// Add CSS for confetti animation\nconst style = document.createElement('style');\nstyle.textContent = `\n    .confetti-container {\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        pointer-events: none;\n        z-index: 9999;\n    }\n    \n    @keyframes confettiFall {\n        0% {\n            transform: translateY(-100vh) rotate(0deg);\n            opacity: 1;\n        }\n        100% {\n            transform: translateY(100vh) rotate(720deg);\n            opacity: 0;\n        }\n    }\n    \n    .payment-footer {\n        margin-top: 2rem;\n        padding-top: 1.5rem;\n        border-top: 1px solid #e0e0e0;\n    }\n    \n    .small-text {\n        font-size: 0.9rem;\n        color: #666;\n        line-height: 1.5;\n    }\n    \n    .small-text a {\n        color: var(--primary);\n        text-decoration: none;\n    }\n    \n    .small-text a:hover {\n        text-decoration: underline;\n    }\n    \n    .small-text i {\n        margin-right: 0.5rem;\n        color: var(--primary);\n    }\n`;\ndocument.head.appendChild(style);\n</script>\n{% endblock %}"

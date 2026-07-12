@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect x="0" y="0" width="200" height="200" rx="30" fill="#34B7EB" />
+  
+  <!-- Mountain Range -->
+  <path d="M0,140 L40,90 L70,120 L100,70 L130,100 L160,60 L200,110 L200,200 L0,200 Z" fill="#2D8EAD" />
+  <path d="M0,160 L30,120 L60,140 L90,100 L120,130 L150,90 L180,120 L200,140 L200,200 L0,200 Z" fill="#1A5D73" />
+  
+  <!-- Sun -->
+  <circle cx="160" cy="40" r="20" fill="#FFD700" />
+  <path d="M160,15 L160,5 M185,40 L195,40 M160,65 L160,75 M135,40 L125,40 M175,25 L182,18 M175,55 L182,62 M145,55 L138,62 M145,25 L138,18" stroke="#FFD700" stroke-width="3" />
+  
+  <!-- Airplane -->
+  <path d="M40,50 L70,40 L100,50 L70,60 Z" fill="white" />
+  <path d="M70,40 L70,60" stroke="white" stroke-width="2" />
+  <path d="M40,50 L30,55 L30,45 Z" fill="white" />
+  
+  <!-- Two Travelers -->
+  <circle cx="50" cy="100" r="10" fill="white" />
+  <path d="M50,110 L50,130 M45,115 L55,115" stroke="white" stroke-width="3" />
+  
+  <circle cx="80" cy="100" r="10" fill="white" />
+  <path d="M80,110 L80,130 M75,115 L85,115" stroke="white" stroke-width="3" />
+  
+  <!-- Connection Line -->
+  <path d="M60,100 L70,100" stroke="white" stroke-width="2" stroke-dasharray="2,2" />
+  
+  <!-- Text -->
+  <text x="100" y="180" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">TRAVEL BUDDY</text>
+</svg>

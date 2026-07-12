@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics Dashboard - Dating App{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analytics.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="analytics-container">
+    <div class="analytics-header">
+        <h1>Your Dating Analytics</h1>
+        <p>Insights to help you optimize your dating experience</p>
+    </div>
+
+    <div class="analytics-overview">
+        <div class="analytics-card">
+            <div class="analytics-card-header">
+                <h2>Profile Views</h2>
+                <div class="time-range">
+                    <span>Last 30 days</span>
+                </div>
+            </div>
+            <div class="analytics-card-content">
+                <div class="analytics-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-views">--</div>
+                        <div class="stat-label">Total Views</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="avg-daily-views">--</div>
+                        <div class="stat-label">Avg. Daily</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-change" id="view-change">--</div>
+                        <div class="stat-label">vs. Previous</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="views-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <div class="analytics-card-header">
+                <h2>Match Statistics</h2>
+            </div>
+            <div class="analytics-card-content">
+                <div class="analytics-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-matches">--</div>
+                        <div class="stat-label">Total Matches</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="match-rate">--</div>
+                        <div class="stat-label">Match Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="conversation-rate">--</div>
+                        <div class="stat-label">Conversation Rate</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="match-sources-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="analytics-row">
+        <div class="analytics-card profile-performance">
+            <div class="analytics-card-header">
+                <h2>Profile Performance</h2>
+            </div>
+            <div class="analytics-card-content">
+                <div class="profile-completeness">
+                    <div class="completeness-header">
+                        <h3>Profile Completeness</h3>
+                        <div class="completeness-percentage" id="profile-completeness">--</div>
+                    </div>
+                    <div class="completeness-bar">
+                        <div class="completeness-progress" id="completeness-progress"></div>
+                    </div>
+                    <div class="completeness-sections" id="completeness-sections">
+                        <!-- Profile sections will be added here -->
+                    </div>
+                </div>
+
+                <div class="performance-scores">
+                    <div class="score-item">
+                        <div class="score-label">Engagement Score</div>
+                        <div class="score-meter">
+                            <div class="score-progress" id="engagement-score-progress"></div>
+                        </div>
+                        <div class="score-value" id="engagement-score">--</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Visibility Score</div>
+                        <div class="score-meter">
+                            <div class="score-progress" id="visibility-score-progress"></div>
+                        </div>
+                        <div class="score-value" id="visibility-score">--</div>
+                    </div>
+                </div>
+
+                <div class="profile-insights">
+                    <div class="insights-column">
+                        <h3>Profile Strengths</h3>
+                        <ul class="insights-list" id="profile-strengths">
+                            <!-- Strengths will be added here -->
+                        </ul>
+                    </div>
+                    <div class="insights-column">
+                        <h3>Areas to Improve</h3>
+                        <ul class="insights-list" id="profile-weaknesses">
+                            <!-- Weaknesses will be added here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="analytics-row">
+        <div class="analytics-card">
+            <div class="analytics-card-header">
+                <h2>Activity Heatmap</h2>
+                <div class="card-subtitle">When you're most active vs. when potential matches are online</div>
+            </div>
+            <div class="analytics-card-content">
+                <div class="heatmap-container">
+                    <div class="heatmap" id="activity-heatmap">
+                        <!-- Heatmap will be rendered here -->
+                    </div>
+                </div>
+                <div class="peak-times">
+                    <h3>Peak Activity Times</h3>
+                    <ul class="peak-times-list" id="peak-times-list">
+                        <!-- Peak times will be added here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <div class="analytics-card-header">
+                <h2>Interest Analytics</h2>
+            </div>
+            <div class="analytics-card-content">
+                <div class="interests-charts">
+                    <div class="chart-container half-width">
+                        <h3>Common Interests with Matches</h3>
+                        <canvas id="common-interests-chart"></canvas>
+                    </div>
+                    <div class="chart-container half-width">
+                        <h3>Interest Match Rates</h3>
+                        <canvas id="interest-match-rates-chart"></canvas>
+                    </div>
+                </div>
+                <div class="popular-interests">
+                    <h3>Popular Interests Among Potential Matches</h3>
+                    <div class="interests-tags" id="popular-interests">
+                        <!-- Popular interests will be added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="analytics-row">
+        <div class="analytics-card recommendations-card">
+            <div class="analytics-card-header">
+                <h2>Personalized Recommendations</h2>
+                <div class="card-subtitle">Tips to improve your dating experience</div>
+            </div>
+            <div class="analytics-card-content">
+                <div class="recommendations-list" id="recommendations-list">
+                    <!-- Recommendations will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+{% endblock %}

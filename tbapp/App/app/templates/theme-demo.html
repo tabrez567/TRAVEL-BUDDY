@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Theme Demo - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/theme-demo.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="theme-demo-container">
+    <div class="demo-header">
+        <h1>🎨 Theme Demo</h1>
+        <p>Experience the perfect light and dark mode switching</p>
+    </div>
+
+    <div class="demo-sections">
+        <!-- Theme Toggle Demo -->
+        <section class="demo-section">
+            <h2>Theme Toggle Button</h2>
+            <p>Click the theme toggle button in the navbar to switch between light and dark modes.</p>
+            <div class="theme-demo-buttons">
+                <button class="demo-btn primary" onclick="ThemeManager.setTheme('light')">
+                    <i class="fas fa-sun"></i>
+                    Light Mode
+                </button>
+                <button class="demo-btn secondary" onclick="ThemeManager.setTheme('dark')">
+                    <i class="fas fa-moon"></i>
+                    Dark Mode
+                </button>
+                <button class="demo-btn accent" onclick="ThemeManager.toggleTheme()">
+                    <i class="fas fa-adjust"></i>
+                    Toggle Theme
+                </button>
+            </div>
+        </section>
+
+        <!-- Color Palette Demo -->
+        <section class="demo-section">
+            <h2>Color Palette</h2>
+            <div class="color-palette">
+                <div class="color-group">
+                    <h3>Primary Colors</h3>
+                    <div class="color-swatches">
+                        <div class="color-swatch primary">
+                            <span class="color-name">Primary</span>
+                            <span class="color-value">#ff4757</span>
+                        </div>
+                        <div class="color-swatch secondary">
+                            <span class="color-name">Secondary</span>
+                            <span class="color-value">#5352ed</span>
+                        </div>
+                        <div class="color-swatch success">
+                            <span class="color-name">Success</span>
+                            <span class="color-value">#2ed573</span>
+                        </div>
+                        <div class="color-swatch warning">
+                            <span class="color-name">Warning</span>
+                            <span class="color-value">#ffa502</span>
+                        </div>
+                        <div class="color-swatch danger">
+                            <span class="color-name">Danger</span>
+                            <span class="color-value">#ff6b81</span>
+                        </div>
+                        <div class="color-swatch info">
+                            <span class="color-name">Info</span>
+                            <span class="color-value">#1e90ff</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Component Demo -->
+        <section class="demo-section">
+            <h2>UI Components</h2>
+            <div class="component-demo">
+                <div class="demo-cards">
+                    <div class="demo-card">
+                        <h3>Card Component</h3>
+                        <p>This is a sample card component that adapts to the current theme.</p>
+                        <button class="btn primary">Primary Button</button>
+                        <button class="btn secondary">Secondary Button</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h3>Form Elements</h3>
+                        <div class="form-group">
+                            <label for="demo-input">Sample Input</label>
+                            <input type="text" id="demo-input" class="form-control" placeholder="Enter text...">
+                        </div>
+                        <div class="form-group">
+                            <label for="demo-select">Sample Select</label>
+                            <select id="demo-select" class="form-control">
+                                <option>Option 1</option>
+                                <option>Option 2</option>
+                                <option>Option 3</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Typography Demo -->
+        <section class="demo-section">
+            <h2>Typography</h2>
+            <div class="typography-demo">
+                <h1>Heading 1</h1>
+                <h2>Heading 2</h2>
+                <h3>Heading 3</h3>
+                <h4>Heading 4</h4>
+                <h5>Heading 5</h5>
+                <h6>Heading 6</h6>
+                <p>This is a paragraph with <strong>bold text</strong> and <em>italic text</em>.</p>
+                <p class="text-muted">This is muted text that adapts to the theme.</p>
+                <p class="text-small">This is small text for captions and labels.</p>
+            </div>
+        </section>
+
+        <!-- Features Demo -->
+        <section class="demo-section">
+            <h2>Theme Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-palette"></i>
+                    <h3>Automatic Detection</h3>
+                    <p>Detects system theme preference and applies it automatically</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-sync"></i>
+                    <h3>Smooth Transitions</h3>
+                    <p>Beautiful animations when switching between themes</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile Optimized</h3>
+                    <p>Perfect theme switching on all devices</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-keyboard"></i>
+                    <h3>Keyboard Shortcut</h3>
+                    <p>Press Ctrl+Shift+T to toggle theme quickly</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-memory"></i>
+                    <h3>Persistent</h3>
+                    <p>Remembers your theme preference across sessions</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-universal-access"></i>
+                    <h3>Accessible</h3>
+                    <p>Full accessibility support with proper ARIA labels</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Demo -->
+        <section class="demo-section">
+            <h2>Usage</h2>
+            <div class="code-demo">
+                <h3>JavaScript API</h3>
+                <pre><code>// Toggle theme
+ThemeManager.toggleTheme();
+
+// Set specific theme
+ThemeManager.setTheme('dark');
+ThemeManager.setTheme('light');
+
+// Get current theme
+const currentTheme = ThemeManager.getCurrentTheme();
+
+// Check if dark mode
+const isDark = ThemeManager.isDark();</code></pre>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/theme-demo.js') }}"></script>
+{% endblock %}

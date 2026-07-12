@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}Recommended Matches - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/match.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="matches-container">
+    <div class="matches-header">
+        <h1>Recommended Matches</h1>
+        <p>People we think you'll love based on your preferences</p>
+    </div>
+
+    <!-- Compatibility Filter -->
+    <div class="compatibility-filter">
+        <h3>Filter by Compatibility</h3>
+        <div class="filter-range">
+            <input type="range" id="compatibility-range" min="50" max="100" value="70">
+            <div class="range-labels">
+                <span>50%</span>
+                <span id="compatibility-value">70%+</span>
+                <span>100%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommended Matches Grid -->
+    <div class="matches-grid" id="matches-grid">
+        <!-- Matches will be loaded dynamically -->
+
+        <!-- Sample match cards -->
+        <div class="match-card" data-compatibility="92">
+            <div class="match-image">
+                <img src="{{ url_for('static', filename='img/avatars/emma.jpg') }}" alt="Emma">
+                <div class="match-badge">92% Match</div>
+                <div class="match-actions">
+                    <button class="btn-like"><i class="fas fa-heart"></i></button>
+                    <button class="btn-superlike"><i class="fas fa-star"></i></button>
+                    <button class="btn-pass"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="match-info">
+                <h3>Emma, 28</h3>
+                <p class="match-location">New York, NY</p>
+                <p class="match-bio">Adventure seeker and coffee lover. Looking for someone to explore the world with.
+                </p>
+                <div class="match-interests">
+                    <span class="interest-tag">Travel</span>
+                    <span class="interest-tag">Coffee</span>
+                    <span class="interest-tag">Hiking</span>
+                </div>
+                <div class="compatibility-breakdown">
+                    <div class="compatibility-item">
+                        <span>Interests</span>
+                        <div class="compatibility-bar">
+                            <div class="compatibility-progress" style="width: 95%"></div>
+                        </div>
+                        <span>95%</span>
+                    </div>
+                    <div class="compatibility-item">
+                        <span>Lifestyle</span>
+                        <div class="compatibility-bar">
+                            <div class="compatibility-progress" style="width: 88%"></div>
+                        </div>
+                        <span>88%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="match-card" data-compatibility="85">
+            <div class="match-image">
+                <img src="{{ url_for('static', filename='img/avatars/michael.jpg') }}" alt="Michael">
+                <div class="match-badge">85% Match</div>
+                <div class="match-actions">
+                    <button class="btn-like"><i class="fas fa-heart"></i></button>
+                    <button class="btn-superlike"><i class="fas fa-star"></i></button>
+                    <button class="btn-pass"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="match-info">
+                <h3>Michael, 32</h3>
+                <p class="match-location">San Francisco, CA</p>
+                <p class="match-bio">Software engineer by day, chef by night. Let's create something delicious together.
+                </p>
+                <div class="match-interests">
+                    <span class="interest-tag">Cooking</span>
+                    <span class="interest-tag">Tech</span>
+                    <span class="interest-tag">Movies</span>
+                </div>
+                <div class="compatibility-breakdown">
+                    <div class="compatibility-item">
+                        <span>Interests</span>
+                        <div class="compatibility-bar">
+                            <div class="compatibility-progress" style="width: 82%"></div>
+                        </div>
+                        <span>82%</span>
+                    </div>
+                    <div class="compatibility-item">
+                        <span>Lifestyle</span>
+                        <div class="compatibility-bar">
+                            <div class="compatibility-progress" style="width: 87%"></div>
+                        </div>
+                        <span>87%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load More -->
+    <div class="load-more">
+        <button class="btn btn-primary" id="load-more-btn">
+            <i class="fas fa-sync"></i>
+            Load More Matches
+        </button>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="empty-matches" style="display: none;">
+        <div class="empty-icon">
+            <i class="fas fa-users"></i>
+        </div>
+        <h3>No matches found</h3>
+        <p>Try adjusting your filters or preferences to see more matches.</p>
+        <a href="{{ url_for('match.search') }}" class="btn btn-primary">Adjust Preferences</a>
+    </div>
+</div>
+
+<!-- Match Modal -->
+<div class="modal" id="match-modal">
+    <div class="modal-content match-modal-content">
+        <div class="match-success">
+            <div class="match-heart">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h2>It's a Match!</h2>
+            <p>You and <span id="match-user-name">Emma</span> liked each other</p>
+            <div class="match-actions">
+                <button class="btn btn-outline" data-dismiss="modal">Keep Browsing</button>
+                <button class="btn btn-primary" id="send-message-btn">Send Message</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/match.js') }}"></script>
+<script>
+    // Recommended matches specific functionality
+    document.addEventListener('DOMContentLoaded', function () {
+        // Compatibility filter
+        const compatibilityRange = document.getElementById('compatibility-range');
+        const compatibilityValue = document.getElementById('compatibility-value');
+
+        if (compatibilityRange && compatibilityValue) {
+            compatibilityRange.addEventListener('input', function () {
+                compatibilityValue.textContent = this.value + '%+';
+                filterMatchesByCompatibility(this.value);
+            });
+        }
+
+        // Like buttons
+        document.querySelectorAll('.btn-like').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const matchCard = this.closest('.match-card');
+                likeProfile(matchCard);
+            });
+        });
+
+        // Superlike buttons
+        document.querySelectorAll('.btn-superlike').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const matchCard = this.closest('.match-card');
+                superlikeProfile(matchCard);
+            });
+        });
+
+        // Pass buttons
+        document.querySelectorAll('.btn-pass').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const matchCard = this.closest('.match-card');
+                passProfile(matchCard);
+            });
+        });
+
+        function filterMatchesByCompatibility(minScore) {
+            document.querySelectorAll('.match-card').forEach(card => {
+                const compatibility = parseInt(card.dataset.compatibility);
+                card.style.display = compatibility >= minScore ? 'block' : 'none';
+            });
+        }
+
+        function likeProfile(card) {
+            card.style.transform = 'translateX(100%) rotate(10deg)';
+            card.style.opacity = '0';
+            setTimeout(() => card.remove(), 300);
+            checkForEmptyState();
+        }
+
+        function superlikeProfile(card) {
+            card.style.transform = 'translateY(-100%) rotate(-5deg)';
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.remove();
+                showMatchModal();
+                checkForEmptyState();
+            }, 300);
+        }
+
+        function passProfile(card) {
+            card.style.transform = 'translateX(-100%) rotate(-10deg)';
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.remove();
+                checkForEmptyState();
+            }, 300);
+        }
+
+        function showMatchModal() {
+            document.getElementById('match-modal').style.display = 'flex';
+        }
+
+        function checkForEmptyState() {
+            const matchesGrid = document.getElementById('matches-grid');
+            const emptyState = document.getElementById('empty-matches');
+
+            if (matchesGrid.children.length === 0) {
+                emptyState.style.display = 'block';
+            }
+        }
+
+        // Load more functionality
+        document.getElementById('load-more-btn').addEventListener('click', function () {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            this.disabled = true;
+
+            setTimeout(() => {
+                // Simulate loading more matches
+                loadMoreMatches();
+                this.innerHTML = '<i class="fas fa-sync"></i> Load More Matches';
+                this.disabled = false;
+            }, 1500);
+        });
+
+        function loadMoreMatches() {
+            // In a real app, this would fetch more matches from the server
+            const matchesGrid = document.getElementById('matches-grid');
+            const sampleMatch = matchesGrid.querySelector('.match-card');
+
+            if (sampleMatch) {
+                const newMatch = sampleMatch.cloneNode(true);
+                matchesGrid.appendChild(newMatch);
+            }
+        }
+    });
+</script>
+{% endblock %}

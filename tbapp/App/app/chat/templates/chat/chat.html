@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Messages - Travel Buddy{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="chat-container" id="chat-page">
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-toggle" id="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Left Sidebar - Conversations List -->
+    <div class="chat-sidebar" id="chat-sidebar">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header">
+            <div class="header-content">
+                <h2>Chats</h2>
+                <div class="connection-status" id="connection-status">
+                    <i class="fas fa-circle"></i>
+                    <span>Connected</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" id="new-chat-btn" title="New conversation">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="sidebar-search">
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="conversation-search" placeholder="Search conversations..." autocomplete="off">
+            </div>
+        </div>
+
+        <!-- Conversations List -->
+        <div class="conversations-list" id="conversations-list">
+            <!-- Conversations will be loaded dynamically -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="conversations-empty" id="conversations-empty">
+            <div class="empty-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <h3>No conversations yet</h3>
+            <p>Start chatting with travel buddies to plan amazing adventures!</p>
+        </div>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="chat-main">
+        <!-- Welcome Screen -->
+        <div class="chat-welcome" id="chat-welcome">
+            <div class="empty-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <h2>Travel Messages</h2>
+            <p>Select a conversation to start messaging</p>
+        </div>
+
+        <!-- Active Chat -->
+        <div class="active-chat" id="active-chat" style="display: none;">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <img id="chat-user-avatar" src="{{ url_for('static', filename='img/avatars/default.jpg') }}" alt="" data-username="">
+                    </div>
+                    <div>
+                        <h3 id="chat-user-name">Select a conversation</h3>
+                        <span class="user-status" id="user-status-text">Offline</span>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button class="icon-btn" id="voice-call-btn" title="Voice call">
+                        <i class="fas fa-phone"></i>
+                    </button>
+                    <button class="icon-btn" id="video-call-btn" title="Video call">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button class="icon-btn" id="more-options-btn" title="More options">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Messages Container -->
+            <div class="messages-container" id="messages-container">
+                <!-- Messages will be loaded dynamically -->
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                <div class="message-avatar">
+                    <img src="{{ url_for('static', filename='img/avatars/default.jpg') }}" alt="">
+                </div>
+                <div class="typing-content">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <p>is typing...</p>
+                </div>
+            </div>
+
+            <!-- Message Input -->
+            <div class="message-input-container">
+                <div class="message-input-form">
+                    <div class="input-wrapper">
+                        <textarea id="message-input" class="message-input" placeholder="Type a message..." maxlength="1000" rows="1"></textarea>
+                    </div>
+                    <button class="send-btn" id="send-button" title="Send message">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Chat Modal -->
+<div class="modal" id="new-chat-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>New Conversation</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-search">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search users..." id="match-search">
+                </div>
+            </div>
+            <div class="matches-list" id="matches-list">
+                <!-- Matches will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script>
+    // Set current user information for chat
+    window.currentUserID = {{ current_user.id }};
+    window.currentUserName = "{{ current_user.name }}";
+    window.currentUserProfilePicture = "{{ current_user.profile_picture or '' }}";
+</script>
+<script src="{{ url_for('static', filename='js/avatar-fallback.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chat-v2.js') }}"></script>
+{% endblock %}

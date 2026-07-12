@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Advanced Search - Dating App{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/discover.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <div class="search-header">
+        <h1>Advanced Search</h1>
+        <p>Find your perfect match with our powerful search tools</p>
+    </div>
+
+    <div class="search-filters">
+        <div class="filter-section">
+            <h2>I'm interested in</h2>
+            <div class="gender-options">
+                <label class="gender-option">
+                    <input type="checkbox" name="gender" value="men" data-filter="men">
+                    <span class="gender-icon"><i class="fas fa-mars"></i></span>
+                    <span class="gender-label">Men</span>
+                </label>
+                <label class="gender-option">
+                    <input type="checkbox" name="gender" value="women" data-filter="women">
+                    <span class="gender-icon"><i class="fas fa-venus"></i></span>
+                    <span class="gender-label">Women</span>
+                </label>
+                <label class="gender-option">
+                    <input type="checkbox" name="gender" value="nonbinary" data-filter="nonbinary">
+                    <span class="gender-icon"><i class="fas fa-transgender"></i></span>
+                    <span class="gender-label">Non-binary</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h2>Age range</h2>
+            <div class="range-slider-container">
+                <div class="range-values">
+                    <span id="age-min-value">18</span>
+                    <span id="age-max-value">45</span>
+                </div>
+                <div class="double-range-slider">
+                    <input type="range" id="age-min" class="range-slider" min="18" max="99" value="18" data-filter="minAge">
+                    <input type="range" id="age-max" class="range-slider" min="18" max="99" value="45" data-filter="maxAge">
+                    <div class="range-slider-track"></div>
+                    <div class="range-slider-progress"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h2>Distance</h2>
+            <div class="range-slider-container">
+                <div class="range-values">
+                    <span id="distance-value">50</span>
+                    <span>km</span>
+                </div>
+                <input type="range" id="distance" class="range-slider" min="1" max="100" value="50" data-filter="distance">
+                <div class="range-slider-track"></div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h2>Looking for</h2>
+            <div class="relationship-options">
+                <label class="relationship-option">
+                    <input type="checkbox" name="relationshipType" value="relationship" data-filter="relationship">
+                    <span class="relationship-icon"><i class="fas fa-heart"></i></span>
+                    <span class="relationship-label">Relationship</span>
+                </label>
+                <label class="relationship-option">
+                    <input type="checkbox" name="relationshipType" value="casual" data-filter="casual">
+                    <span class="relationship-icon"><i class="fas fa-fire"></i></span>
+                    <span class="relationship-label">Casual</span>
+                </label>
+                <label class="relationship-option">
+                    <input type="checkbox" name="relationshipType" value="friendship" data-filter="friendship">
+                    <span class="relationship-icon"><i class="fas fa-user-friends"></i></span>
+                    <span class="relationship-label">Friendship</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h2>Interests</h2>
+            <div class="interests-container">
+                <div class="interests-search">
+                    <input type="text" id="interest-search" placeholder="Search interests...">
+                    <button id="add-interest" class="btn-primary"><i class="fas fa-plus"></i></button>
+                </div>
+                <div class="selected-interests" id="selected-interests">
+                    <!-- Selected interests will be added here -->
+                </div>
+                <div class="interests-dropdown" id="interests-dropdown">
+                    <!-- Available interests will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="verification-option">
+                <label class="switch">
+                    <input type="checkbox" id="verified-only" data-filter="verified">
+                    <span class="slider round"></span>
+                </label>
+                <span class="verification-label">Show verified profiles only</span>
+                <span class="verification-icon"><i class="fas fa-check-circle"></i></span>
+            </div>
+        </div>
+
+        <div class="filter-actions">
+            <button id="reset-filters" class="btn-outline">Reset Filters</button>
+            <button id="apply-filters" class="btn-primary">Apply Filters</button>
+        </div>
+    </div>
+
+    <div class="search-results">
+        <div class="results-header">
+            <h2>Results</h2>
+            <div class="results-count"><span id="results-count">0</span> matches found</div>
+            <div class="results-sort">
+                <label for="sort-by">Sort by:</label>
+                <select id="sort-by">
+                    <option value="match">Match %</option>
+                    <option value="distance">Distance</option>
+                    <option value="activity">Activity</option>
+                    <option value="newest">Newest</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="results-grid" id="results-grid">
+            <!-- Search results will be loaded here -->
+            <div class="loading-results">
+                <div class="loading-spinner"></div>
+                <p>Finding your matches...</p>
+            </div>
+        </div>
+
+        <div class="results-pagination">
+            <button id="load-more" class="btn-outline">Load More</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% endblock %}

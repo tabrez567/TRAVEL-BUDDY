@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% block title %}Verify Your Profile - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+<style>
+    .verification-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: var(--card-color);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .verification-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .verification-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .verification-step {
+        display: flex;
+        gap: 1rem;
+        padding: 1.5rem;
+        border-radius: var(--radius-md);
+        background-color: rgba(255, 255, 255, 0.8);
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-normal);
+    }
+    
+    .verification-step:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .step-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+    
+    .step-content {
+        flex: 1;
+    }
+    
+    .step-title {
+        font-weight: 600;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+    }
+    
+    .step-description {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+    }
+    
+    .verification-form {
+        margin-top: 2rem;
+    }
+    
+    .verification-form .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .verification-form label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+    
+    .verification-form input[type="file"] {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+    }
+    
+    .verification-form .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-weight: 500;
+        transition: var(--transition-fast);
+    }
+    
+    .verification-form .btn-primary:hover {
+        background-color: var(--primary-dark);
+    }
+    
+    .verification-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: var(--radius-sm);
+        background-color: rgba(46, 213, 115, 0.1);
+    }
+    
+    .verification-status.pending {
+        background-color: rgba(255, 165, 2, 0.1);
+    }
+    
+    .verification-status.verified {
+        background-color: rgba(46, 213, 115, 0.1);
+    }
+    
+    .verification-status i {
+        font-size: 1.2rem;
+    }
+    
+    .verification-status.pending i {
+        color: var(--warning-color);
+    }
+    
+    .verification-status.verified i {
+        color: var(--success-color);
+    }
+    
+    .selfie-preview {
+        max-width: 300px;
+        margin-top: 1rem;
+        border-radius: var(--radius-md);
+        display: none;
+    }
+    
+    .id-preview {
+        max-width: 300px;
+        margin-top: 1rem;
+        border-radius: var(--radius-md);
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="verification-container">
+    <div class="verification-header">
+        <h1>Verify Your Profile</h1>
+        <p>Complete the verification process to get a verified badge on your profile and increase your chances of matching.</p>
+        
+        {% if current_user.is_verified %}
+        <div class="verification-status verified">
+            <i class="fas fa-check-circle"></i>
+            <span>Your profile is verified! The verified badge is now displayed on your profile.</span>
+        </div>
+        {% else %}
+        <div class="verification-status pending">
+            <i class="fas fa-clock"></i>
+            <span>Your profile is not verified yet. Complete the steps below to get verified.</span>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="verification-steps">
+        <div class="verification-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3 class="step-title">Take a Selfie</h3>
+                <p class="step-description">Take a clear selfie showing your face. Make sure you're in good lighting and your face is clearly visible.</p>
+            </div>
+        </div>
+        
+        <div class="verification-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3 class="step-title">Upload ID Proof</h3>
+                <p class="step-description">Upload a photo of your government-issued ID (passport, driver's license, etc.). We'll only use this to verify your identity.</p>
+            </div>
+        </div>
+        
+        <div class="verification-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3 class="step-title">Submit for Review</h3>
+                <p class="step-description">Our team will review your verification request within 24-48 hours. You'll receive a notification once verified.</p>
+            </div>
+        </div>
+    </div>
+    
+    {% if not current_user.is_verified %}
+    <div class="verification-form">
+        <form id="verification-form" action="{{ url_for('profile.submit_verification') }}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="selfie">Upload Selfie</label>
+                <input type="file" id="selfie" name="selfie" accept="image/*" required>
+                <img id="selfie-preview" class="selfie-preview" alt="Selfie Preview">
+            </div>
+            
+            <div class="form-group">
+                <label for="id_proof">Upload ID Proof</label>
+                <input type="file" id="id_proof" name="id_proof" accept="image/*" required>
+                <img id="id-preview" class="id-preview" alt="ID Preview">
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn-primary">Submit for Verification</button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Preview uploaded images
+    document.getElementById('selfie').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('selfie-preview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    document.getElementById('id_proof').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('id-preview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Form submission
+    document.getElementById('verification-form').addEventListener('submit', function(event) {
+        // You can add client-side validation here if needed
+        // For example, checking file types, sizes, etc.
+        
+        // Show loading state
+        const submitButton = this.querySelector('button[type="submit"]');
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitButton.disabled = true;
+    });
+</script>
+{% endblock %}

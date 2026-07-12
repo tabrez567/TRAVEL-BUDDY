@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+
+{% block title %}Complete Your Profile - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+<style>
+    .new-profile-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: var(--bg-secondary);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    .new-profile-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .new-profile-header h1 {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    .new-profile-header p {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+    
+    .progress-bar-container {
+        width: 100%;
+        height: 8px;
+        background-color: var(--bg-tertiary);
+        border-radius: var(--radius-full);
+        margin: 2rem 0;
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        border-radius: var(--radius-full);
+        transition: width 0.5s ease;
+    }
+    
+    .step-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+    }
+    
+    .step-indicator {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    
+    .step-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--bg-tertiary);
+        margin: 0 5px;
+        transition: all 0.3s ease;
+    }
+    
+    .step-dot.active {
+        background-color: var(--primary);
+        transform: scale(1.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="new-profile-container">
+    <div class="new-profile-header">
+        <h1>Complete Your Profile</h1>
+        <p>Let's set up your profile to help you find better matches</p>
+    </div>
+    
+    <div class="step-indicator">
+        <div class="step-dot active" data-step="1"></div>
+        <div class="step-dot" data-step="2"></div>
+        <div class="step-dot" data-step="3"></div>
+    </div>
+    
+    <div class="progress-bar-container">
+        <div class="progress-bar" style="width: 33%;"></div>
+    </div>
+    
+    <form id="new-profile-form" class="profile-form" method="POST" enctype="multipart/form-data">
+        <!-- Step 1: Basic Information -->
+        <div class="form-step" id="step-1">
+            <h2>Basic Information</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" class="form-control" required maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age *</label>
+                    <input type="number" id="age" name="age" class="form-control" min="18" max="99" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender *</label>
+                    <select id="gender" name="gender" class="form-control" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                        <option value="prefer_not_to_say">Prefer not to say</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Location *</label>
+                    <input type="text" id="location" name="location" class="form-control" required placeholder="City, State">
+                    <span class="help-text">Your general location helps find nearby matches</span>
+                </div>
+            </div>
+            
+            <div class="step-buttons">
+                <div></div> <!-- Empty div for flex spacing -->
+                <button type="button" class="btn btn-primary next-step" data-next="2">Continue</button>
+            </div>
+        </div>
+        
+        <!-- Step 2: Photos -->
+        <div class="form-step" id="step-2" style="display: none;">
+            <h2>Profile Photos</h2>
+            <p>Add at least one profile photo (you can add more later)</p>
+            
+            <div class="photos-upload">
+                <div class="photos-grid">
+                    <div class="photo-upload-item">
+                        <img src="{{ url_for('static', filename='img/avatars/default.jpg') }}" 
+                             alt="Profile Photo" id="profile-preview">
+                        <div class="photo-actions">
+                            <label for="profile-picture" class="btn btn-sm btn-outline">
+                                <i class="fas fa-camera"></i>
+                                Add Photo
+                            </label>
+                            <input type="file" id="profile-picture" name="profile_picture" 
+                                   accept="image/*" style="display: none;" required>
+                        </div>
+                        <span class="photo-label">Main Profile Photo</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step-buttons">
+                <button type="button" class="btn btn-outline prev-step" data-prev="1">Back</button>
+                <button type="button" class="btn btn-primary next-step" data-next="3">Continue</button>
+            </div>
+        </div>
+        
+        <!-- Step 3: About Me -->
+        <div class="form-step" id="step-3" style="display: none;">
+            <h2>About You</h2>
+            <p>Tell potential matches about yourself</p>
+            
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio" class="form-control" rows="4" 
+                          placeholder="Share something interesting about yourself..."></textarea>
+                <span class="help-text">Max 500 characters</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Interests</label>
+                <div class="interests-container">
+                    <div class="interest-tags">
+                        <span class="interest-tag">
+                            <input type="checkbox" id="interest-music" name="interests[]" value="music">
+                            <label for="interest-music">Music</label>
+                        </span>
+                        <span class="interest-tag">
+                            <input type="checkbox" id="interest-travel" name="interests[]" value="travel">
+                            <label for="interest-travel">Travel</label>
+                        </span>
+                        <span class="interest-tag">
+                            <input type="checkbox" id="interest-food" name="interests[]" value="food">
+                            <label for="interest-food">Food</label>
+                        </span>
+                        <span class="interest-tag">
+                            <input type="checkbox" id="interest-fitness" name="interests[]" value="fitness">
+                            <label for="interest-fitness">Fitness</label>
+                        </span>
+                        <span class="interest-tag">
+                            <input type="checkbox" id="interest-art" name="interests[]" value="art">
+                            <label for="interest-art">Art</label>
+                        </span>
+                        <span class="interest-tag">
+                            <input type="checkbox" id="interest-reading" name="interests[]" value="reading">
+                            <label for="interest-reading">Reading</label>
+                        </span>
+                        <span class="interest-tag">
+                            <input type="checkbox" id="interest-gaming" name="interests[]" value="gaming">
+                            <label for="interest-gaming">Gaming</label>
+                        </span>
+                        <span class="interest-tag">
+                            <input type="checkbox" id="interest-movies" name="interests[]" value="movies">
+                            <label for="interest-movies">Movies</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step-buttons">
+                <button type="button" class="btn btn-outline prev-step" data-prev="2">Back</button>
+                <button type="submit" class="btn btn-primary">Complete Profile</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Step navigation
+        const nextButtons = document.querySelectorAll('.next-step');
+        const prevButtons = document.querySelectorAll('.prev-step');
+        const steps = document.querySelectorAll('.form-step');
+        const dots = document.querySelectorAll('.step-dot');
+        const progressBar = document.querySelector('.progress-bar');
+        
+        nextButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const nextStep = this.getAttribute('data-next');
+                
+                // Validate current step
+                const currentStep = parseInt(nextStep) - 1;
+                if (validateStep(currentStep)) {
+                    // Hide all steps
+                    steps.forEach(step => step.style.display = 'none');
+                    
+                    // Show next step
+                    document.getElementById(`step-${nextStep}`).style.display = 'block';
+                    
+                    // Update progress bar
+                    progressBar.style.width = `${parseInt(nextStep) * 33}%`;
+                    
+                    // Update step dots
+                    dots.forEach(dot => dot.classList.remove('active'));
+                    document.querySelector(`.step-dot[data-step="${nextStep}"]`).classList.add('active');
+                }
+            });
+        });
+        
+        prevButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const prevStep = this.getAttribute('data-prev');
+                
+                // Hide all steps
+                steps.forEach(step => step.style.display = 'none');
+                
+                // Show previous step
+                document.getElementById(`step-${prevStep}`).style.display = 'block';
+                
+                // Update progress bar
+                progressBar.style.width = `${parseInt(prevStep) * 33}%`;
+                
+                // Update step dots
+                dots.forEach(dot => dot.classList.remove('active'));
+                document.querySelector(`.step-dot[data-step="${prevStep}"]`).classList.add('active');
+            });
+        });
+        
+        // Profile picture preview
+        const profilePicInput = document.getElementById('profile-picture');
+        const profilePreview = document.getElementById('profile-preview');
+        
+        profilePicInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    profilePreview.src = e.target.result;
+                    profilePreview.parentElement.classList.add('has-photo');
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+        
+        // Form validation
+        function validateStep(stepNumber) {
+            let isValid = true;
+            
+            if (stepNumber === 1) {
+                // Validate basic info
+                const name = document.getElementById('name').value;
+                const age = document.getElementById('age').value;
+                const gender = document.getElementById('gender').value;
+                const location = document.getElementById('location').value;
+                
+                if (!name || !age || !gender || !location) {
+                    alert('Please fill in all required fields');
+                    isValid = false;
+                }
+            } else if (stepNumber === 2) {
+                // Validate photo
+                const profilePic = document.getElementById('profile-picture').files;
+                
+                if (profilePic.length === 0 && !profilePreview.getAttribute('src').includes('default.jpg')) {
+                    alert('Please upload a profile photo');
+                    isValid = false;
+                }
+            }
+            
+            return isValid;
+        }
+    });
+</script>
+{% endblock %}

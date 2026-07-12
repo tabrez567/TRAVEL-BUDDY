@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - Travel Buddy{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Travel Buddy" class="auth-logo">
+            <h1>Create Account</h1>
+            <p>Join Travel Buddy and find your perfect travel companion</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('auth.signup') }}" class="auth-form" id="signup-form" enctype="multipart/form-data" novalidate>
+            
+            <div class="form-group">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required>
+                <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Create a password" required>
+                <div class="invalid-feedback"></div>
+                <button type="button" class="password-toggle" id="password-toggle">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <div class="password-strength">
+                    <div class="strength-meter">
+                        <div class="strength-bar"></div>
+                    </div>
+                    <span class="strength-text">Password strength</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password" class="form-label">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm_password" class="form-control" placeholder="Confirm your password" required>
+                <div class="invalid-feedback"></div>
+                <button type="button" class="password-toggle" id="confirm-password-toggle">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="terms" id="terms" required>
+                    <span class="checkmark"></span>
+                    I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                </label>
+                <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="newsletter" id="newsletter" checked>
+                    <span class="checkmark"></span>
+                    Send me travel tips and adventure stories
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="profile-picture" class="form-label">Profile Picture</label>
+                <div class="profile-upload">
+                    <input type="file" id="profile-picture" name="profile_picture" accept="image/*" class="file-input">
+                    <label for="profile-picture" class="upload-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Choose a photo</span>
+                    </label>
+                    <div class="preview-container">
+                        <img id="preview-image" src="{{ url_for('static', filename='img/avatars/default.jpg') }}" alt="Preview">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg auth-btn" id="signup-button">Create Account</button>
+        </form>
+        
+
+
+        <div class="social-login">
+            <div class="social-login-text">or sign up with</div>
+            <div class="social-buttons">
+                <button class="social-btn google" aria-label="Sign up with Google">
+                    <i class="fab fa-google"></i>
+                </button>
+                <button class="social-btn facebook" aria-label="Sign up with Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </button>
+                <button class="social-btn twitter" aria-label="Sign up with Twitter">
+                    <i class="fab fa-twitter"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="{{ url_for('auth.login') }}">Sign in</a></p>
+        </div>
+    </div>
+
+    <div class="auth-hero">
+        <div class="hero-content">
+            <h2>Why Choose Travel Buddy?</h2>
+            <ul class="feature-list">
+                <li>
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <h4>Safe & Secure</h4>
+                        <p>Verified travelers and advanced safety features</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="fas fa-plane"></i>
+                    <div>
+                        <h4>Smart Matching</h4>
+                        <p>AI-powered algorithm for compatible travel partners</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="fas fa-comments"></i>
+                    <div>
+                        <h4>Travel Planning</h4>
+                        <p>Plan your adventures with like-minded travelers</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="fas fa-globe"></i>
+                    <div>
+                        <h4>Global Community</h4>
+                        <p>Connect with travelers from around the world</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Password toggle functionality
+        setupPasswordToggle('password');
+        setupPasswordToggle('confirm-password');
+
+        // Password strength meter
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.querySelector('.strength-bar');
+        const strengthText = document.querySelector('.strength-text');
+        
+        if (passwordInput && strengthBar && strengthText) {
+            passwordInput.addEventListener('input', function() {
+                const strength = calculatePasswordStrength(this.value);
+                updateStrengthMeter(strength);
+            });
+        }
+
+        // Form validation
+        const form = document.getElementById('signup-form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                
+                // Name validation
+                const name = document.getElementById('name');
+                if (!name.value || name.value.length < 2) {
+                    showError(name, 'Please enter your full name');
+                    isValid = false;
+                } else {
+                    clearError(name);
+                }
+                
+                // Email validation
+                const email = document.getElementById('email');
+                if (!email.value || !email.value.includes('@')) {
+                    showError(email, 'Please enter a valid email address');
+                    isValid = false;
+                } else {
+                    clearError(email);
+                }
+                
+                // Password validation
+                const password = document.getElementById('password');
+                if (!password.value || password.value.length < 6) {
+                    showError(password, 'Password must be at least 6 characters');
+                    isValid = false;
+                } else {
+                    clearError(password);
+                }
+                
+                // Confirm password validation
+                const confirmPassword = document.getElementById('confirm-password');
+                if (password.value !== confirmPassword.value) {
+                    showError(confirmPassword, 'Passwords do not match');
+                    isValid = false;
+                } else {
+                    clearError(confirmPassword);
+                }
+                
+                // Terms validation
+                const terms = document.getElementById('terms');
+                if (!terms.checked) {
+                    const formGroup = terms.closest('.form-group');
+                    let feedback = formGroup.querySelector('.invalid-feedback');
+                    
+                    if (!feedback) {
+                        feedback = document.createElement('div');
+                        feedback.className = 'invalid-feedback';
+                        formGroup.appendChild(feedback);
+                    }
+                    
+                    feedback.textContent = 'You must agree to the terms and conditions';
+                    feedback.style.display = 'block';
+                    isValid = false;
+                } else {
+                    const formGroup = terms.closest('.form-group');
+                    const feedback = formGroup.querySelector('.invalid-feedback');
+                    if (feedback) {
+                        feedback.style.display = 'none';
+                    }
+                }
+                
+                if (!isValid) {
+                    e.preventDefault();
+                } else {
+                    // Show loading state on button
+                    const button = document.getElementById('signup-button');
+                    button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating account...';
+                    button.disabled = true;
+                }
+            });
+        }
+
+        // Image preview functionality
+        const fileInput = document.getElementById('profile-picture');
+        const previewImage = document.getElementById('preview-image');
+        
+        if (fileInput && previewImage) {
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Check if file is an image
+                    if (!file.type.startsWith('image/')) {
+                        alert('Please select an image file');
+                        return;
+                    }
+                    
+                    // Check file size (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('Image must be less than 5MB');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        previewImage.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function setupPasswordToggle(fieldId) {
+            const toggle = document.getElementById(fieldId + '-toggle');
+            const input = document.getElementById(fieldId);
+            
+            if (toggle && input) {
+                toggle.addEventListener('click', function() {
+                    const type = input.type === 'password' ? 'text' : 'password';
+                    input.type = type;
+                    this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                });
+            }
+        }
+
+        function calculatePasswordStrength(password) {
+            let strength = 0;
+            
+            if (password.length >= 8) strength += 1;
+            if (/[A-Z]/.test(password)) strength += 1;
+            if (/[0-9]/.test(password)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+            
+            return Math.min(strength, 4);
+        }
+
+        function updateStrengthMeter(strength) {
+            const strengthBar = document.querySelector('.strength-bar');
+            const strengthText = document.querySelector('.strength-text');
+            
+            if (!strengthBar || !strengthText) return;
+            
+            const percentages = ['0%', '25%', '50%', '75%', '100%'];
+            const colors = ['#dc3545', '#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1'];
+            const texts = ['Very Weak', 'Weak', 'Fair', 'Strong', 'Very Strong'];
+            
+            strengthBar.style.width = percentages[strength];
+            strengthBar.style.background = colors[strength];
+            strengthText.textContent = strength === 0 ? 'Password strength' : texts[strength];
+            strengthText.style.color = strength === 0 ? 'var(--text-secondary)' : colors[strength];
+        }
+
+        function showError(input, message) {
+            const formGroup = input.closest('.form-group');
+            let feedback = formGroup.querySelector('.invalid-feedback');
+            
+            if (!feedback) {
+                feedback = document.createElement('div');
+                feedback.className = 'invalid-feedback';
+                formGroup.appendChild(feedback);
+            }
+            
+            feedback.textContent = message;
+            input.classList.add('is-invalid');
+        }
+
+        function clearError(input) {
+            const formGroup = input.closest('.form-group');
+            const feedback = formGroup.querySelector('.invalid-feedback');
+            
+            if (feedback) {
+                feedback.remove();
+            }
+            
+            input.classList.remove('is-invalid');
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Block Users - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/safety.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="safety-container">
+    <div class="safety-header">
+        <h1>Block Users</h1>
+        <p>Manage users you've blocked and their messages</p>
+    </div>
+
+    <div class="block-content">
+        <!-- Blocked Users List -->
+        <div class="blocked-users-section">
+            <h2>Blocked Users</h2>
+            <p>These users cannot contact you or see your profile.</p>
+            
+            <div class="blocked-users-list" id="blocked-users-list">
+                <!-- Blocked users will be loaded here -->
+                <div class="blocked-user-item">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <img src="{{ url_for('static', filename='img/avatars/6.jpg') }}" alt="John Doe">
+                        </div>
+                        <div class="user-details">
+                            <h4>John Doe</h4>
+                            <p>Blocked on: July 15, 2023</p>
+                            <span class="block-reason">Reason: Inappropriate messages</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-outline unblock-btn">Unblock</button>
+                </div>
+                
+                <div class="blocked-user-item">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <img src="{{ url_for('static', filename='img/avatars/7.jpg') }}" alt="Jane Smith">
+                        </div>
+                        <div class="user-details">
+                            <h4>Jane Smith</h4>
+                            <p>Blocked on: July 10, 2023</p>
+                            <span class="block-reason">Reason: Spam account</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-outline unblock-btn">Unblock</button>
+                </div>
+            </div>
+            
+            <div class="empty-state" id="empty-blocked" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-ban"></i>
+                </div>
+                <h3>No blocked users</h3>
+                <p>You haven't blocked any users yet.</p>
+            </div>
+        </div>
+
+        <!-- Block New User -->
+        <div class="block-new-section">
+            <h2>Block a User</h2>
+            <p>Enter a username to block them from contacting you.</p>
+            
+            <div class="block-form">
+                <div class="form-group">
+                    <label for="username-to-block">Username</label>
+                    <input type="text" id="username-to-block" class="form-control" 
+                           placeholder="Enter username to block">
+                </div>
+                
+                <div class="form-group">
+                    <label for="block-reason">Reason (optional)</label>
+                    <select id="block-reason" class="form-control">
+                        <option value="">Select a reason</option>
+                        <option value="inappropriate">Inappropriate behavior</option>
+                        <option value="spam">Spam messages</option>
+                        <option value="harassment">Harassment</option>
+                        <option value="fake">Fake profile</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="custom-reason" style="display: none;">
+                    <label for="custom-reason-text">Please specify</label>
+                    <textarea id="custom-reason-text" class="form-control" 
+                              placeholder="Enter your reason for blocking this user"></textarea>
+                </div>
+                
+                <button class="btn btn-danger" id="block-user-btn">Block User</button>
+            </div>
+        </div>
+
+        <!-- Blocked Messages -->
+        <div class="blocked-messages-section">
+            <h2>Blocked Messages</h2>
+            <p>Messages from blocked users are automatically filtered.</p>
+            
+            <div class="blocked-messages">
+                <div class="message-filter">
+                    <button class="filter-btn active">All Messages</button>
+                    <button class="filter-btn">Unread</button>
+                    <button class="filter-btn">Reported</button>
+                </div>
+                
+                <div class="messages-list">
+                    <div class="message-item blocked">
+                        <div class="message-header">
+                            <div class="sender-info">
+                                <img src="{{ url_for('static', filename='img/avatars/6.jpg') }}" alt="John Doe">
+                                <span>John Doe (Blocked)</span>
+                            </div>
+                            <span class="message-time">2 days ago</span>
+                        </div>
+                        <div class="message-content">
+                            <p>This message was blocked and hidden for your safety.</p>
+                            <button class="btn btn-sm btn-outline view-message-btn">View Message</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Unblock Confirmation Modal -->
+<div class="modal" id="unblock-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Unblock User</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to unblock <strong id="unblock-user-name">this user</strong>?</p>
+            <p>They will be able to contact you and see your profile again.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" data-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" id="confirm-unblock">Unblock</button>
+        </div>
+    </div>
+</div>
+
+<!-- View Blocked Message Modal -->
+<div class="modal" id="view-message-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Blocked Message</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="message-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>This message was blocked for your safety. Please review carefully.</p>
+            </div>
+            <div class="message-content">
+                <p id="blocked-message-text"></p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" data-dismiss="modal">Close</button>
+            <button class="btn btn-danger" id="report-message">Report</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/safety.js') }}"></script>
+<script>
+// Additional block-specific functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Show custom reason field when "Other" is selected
+    const reasonSelect = document.getElementById('block-reason');
+    const customReason = document.getElementById('custom-reason');
+    
+    if (reasonSelect && customReason) {
+        reasonSelect.addEventListener('change', function() {
+            customReason.style.display = this.value === 'other' ? 'block' : 'none';
+        });
+    }
+    
+    // Unblock user functionality
+    document.querySelectorAll('.unblock-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const userName = this.closest('.blocked-user-item').querySelector('h4').textContent;
+            document.getElementById('unblock-user-name').textContent = userName;
+            document.getElementById('unblock-modal').style.display = 'flex';
+        });
+    });
+    
+    // View blocked message
+    document.querySelectorAll('.view-message-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('view-message-modal').style.display = 'flex';
+        });
+    });
+    
+    // Modal close functionality
+    document.querySelectorAll('.modal-close, [data-dismiss="modal"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.closest('.modal').style.display = 'none';
+        });
+    });
+});
+</script>
+{% endblock %}

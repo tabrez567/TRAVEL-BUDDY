@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Travel Buddy{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1>Welcome back, {{ current_user.name }}!</h1>
+        <p>Ready for your next adventure? Here's your travel journey overview</p>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-plane"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ data.stats.total_trips }}</h3>
+                <p>Total Trips</p>
+                <span class="stat-trend positive">{{ data.stats.completed_trips }} completed</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ data.stats.total_matches }}</h3>
+                <p>Travel Buddies</p>
+                <span class="stat-trend positive">New connections</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ data.stats.profile_completeness }}%</h3>
+                <p>Profile Complete</p>
+                <span class="stat-trend positive">Keep improving!</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="compatibility-score">0%</h3>
+                <p>Avg. Compatibility</p>
+                <span class="stat-trend">Based on 42 matches</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Trips Section -->
+    {% if data.upcoming_trips %}
+    <div class="upcoming-trips-section">
+        <div class="section-header">
+            <h2>Upcoming Trips</h2>
+            <a href="{{ url_for('trips.my_trips') }}" class="btn btn-outline-primary">View All</a>
+        </div>
+        <div class="trips-grid">
+            {% for trip in data.upcoming_trips %}
+            <div class="trip-card">
+                <div class="trip-header">
+                    <h4>{{ trip.title }}</h4>
+                    <span class="trip-status badge badge-{{ 'success' if trip.status == 'confirmed' else 'warning' }}">
+                        {{ trip.status.title() }}
+                    </span>
+                </div>
+                <div class="trip-details">
+                    <p><i class="fas fa-map-marker-alt"></i> {{ trip.destination }}</p>
+                    <p><i class="fas fa-calendar"></i> {{ trip.start_date.strftime('%B %d, %Y') }} - {{ trip.end_date.strftime('%B %d, %Y') }}</p>
+                    {% if trip.budget %}
+                    <p><i class="fas fa-dollar-sign"></i> Budget: ${{ "%.2f"|format(trip.budget) }}</p>
+                    {% endif %}
+                </div>
+                <div class="trip-actions">
+                    <a href="{{ url_for('trips.trip_details', trip_id=trip.id) }}" class="btn btn-sm btn-primary">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Main Content Grid -->
+    <div class="dashboard-grid">
+        <!-- Left Column -->
+        <div class="dashboard-column">
+            <!-- Profile Views Chart -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Profile Views</h3>
+                    <div class="card-actions">
+                        <select id="views-timeframe">
+                            <option value="7">Last 7 days</option>
+                            <option value="30">Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="profileViewsChart" height="250"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Recent Activity</h3>
+                </div>
+                <div class="card-body">
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-plane text-primary"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>New trip created: <strong>Tokyo Adventure</strong></p>
+                                <span class="activity-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-users text-success"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Sarah</strong> joined your trip</p>
+                                <span class="activity-time">5 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-comment text-info"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Mike</strong> sent you a message</p>
+                                <span class="activity-time">1 day ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-heart text-danger"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>You matched with <strong>Emma</strong></p>
+                                <span class="activity-time">2 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="dashboard-column">
+            <!-- Travel Compatibility Scores -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Travel Compatibility</h3>
+                </div>
+                <div class="card-body">
+                    <div class="compatibility-list">
+                        <div class="compatibility-item">
+                            <div class="compatibility-label">
+                                <span>Travel Style</span>
+                                <span class="compatibility-score">92%</span>
+                            </div>
+                            <div class="compatibility-bar">
+                                <div class="compatibility-progress" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div class="compatibility-item">
+                            <div class="compatibility-label">
+                                <span>Lifestyle</span>
+                                <span class="compatibility-score">72%</span>
+                            </div>
+                            <div class="compatibility-bar">
+                                <div class="compatibility-progress" style="width: 72%"></div>
+                            </div>
+                        </div>
+                        <div class="compatibility-item">
+                            <div class="compatibility-label">
+                                <span>Values</span>
+                                <span class="compatibility-score">90%</span>
+                            </div>
+                            <div class="compatibility-bar">
+                                <div class="compatibility-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="compatibility-item">
+                            <div class="compatibility-label">
+                                <span>Personality</span>
+                                <span class="compatibility-score">68%</span>
+                            </div>
+                            <div class="compatibility-bar">
+                                <div class="compatibility-progress" style="width: 68%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Quick Actions</h3>
+                </div>
+                <div class="card-body">
+                    <div class="quick-actions-grid">
+                        <a href="{{ url_for('match.swipe') }}" class="quick-action">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <span>Discover</span>
+                        </a>
+                        <a href="{{ url_for('chat.chat') }}" class="quick-action">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <span>Messages</span>
+                        </a>
+                        <a href="{{ url_for('profile.profile') }}" class="quick-action">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-user-edit"></i>
+                            </div>
+                            <span>Edit Profile</span>
+                        </a>
+                        <a href="{{ url_for('monetization.plans') }}" class="quick-action">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <span>Upgrade</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Completeness -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Profile Completeness</h3>
+                </div>
+                <div class="card-body">
+                    <div class="profile-completeness">
+                        <div class="completeness-progress">
+                            <div class="progress-circle" data-percent="75">
+                                <span>75%</span>
+                            </div>
+                        </div>
+                        <div class="completeness-tips">
+                            <p>Complete your profile to get more matches:</p>
+                            <ul>
+                                <li><i class="fas fa-check-circle text-success"></i> Basic info</li>
+                                <li><i class="fas fa-check-circle text-success"></i> Profile photo</li>
+                                <li><i class="fas fa-times-circle text-danger"></i> Add more photos</li>
+                                <li><i class="fas fa-times-circle text-danger"></i> Verify your profile</li>
+                            </ul>
+                            <a href="{{ url_for('profile.profile') }}" class="btn btn-primary btn-sm">Complete Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,157 @@
+<!-- Chat Sidebar Component -->
+<div class="chat-sidebar">
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+        <h2>Messages</h2>
+        <div class="header-actions">
+            <button class="icon-btn" id="new-chat-btn" title="New conversation">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button class="icon-btn" id="sidebar-menu-btn" title="Menu">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Search -->
+    <div class="sidebar-search">
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="conversation-search" placeholder="Search conversations...">
+        </div>
+    </div>
+
+    <!-- Conversations List -->
+    <div class="conversations-list" id="conversations-list">
+        <!-- Conversations will be loaded dynamically -->
+        
+        <!-- Sample conversation items -->
+        <div class="conversation-item" data-user-id="1">
+            <div class="conversation-avatar">
+                <img src="{{ url_for('static', filename='img/avatars/1.jpg') }}" alt="Sarah">
+                <span class="status-indicator online"></span>
+            </div>
+            <div class="conversation-info">
+                <div class="conversation-header">
+                    <h4>Sarah Johnson</h4>
+                    <span class="conversation-time">10:30 AM</span>
+                </div>
+                <div class="conversation-preview">
+                    <p>Hey! How are you doing today?</p>
+                    <span class="unread-badge">3</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="conversation-item" data-user-id="2">
+            <div class="conversation-avatar">
+                <img src="{{ url_for('static', filename='img/avatars/2.jpg') }}" alt="Mike">
+                <span class="status-indicator offline"></span>
+            </div>
+            <div class="conversation-info">
+                <div class="conversation-header">
+                    <h4>Mike Chen</h4>
+                    <span class="conversation-time">Yesterday</span>
+                </div>
+                <div class="conversation-preview">
+                    <p>Let's meet up this weekend!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="conversation-item" data-user-id="3">
+            <div class="conversation-avatar">
+                <img src="{{ url_for('static', filename='img/avatars/3.jpg') }}" alt="Emma">
+                <span class="status-indicator away"></span>
+            </div>
+            <div class="conversation-info">
+                <div class="conversation-header">
+                    <h4>Emma Davis</h4>
+                    <span class="conversation-time">2 days ago</span>
+                </div>
+                <div class="conversation-preview">
+                    <p>Thanks for the great conversation!</p>
+                    <span class="unread-badge">1</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="conversations-empty" id="conversations-empty" style="display: none;">
+        <div class="empty-icon">
+            <i class="fas fa-comments"></i>
+        </div>
+        <h3>No conversations yet</h3>
+        <p>Start matching with people to begin conversations.</p>
+        <a href="{{ url_for('match.swipe') }}" class="btn btn-primary">Start Matching</a>
+    </div>
+
+    <!-- Connection Status -->
+    <div class="connection-status" id="connection-status">
+        <i class="fas fa-circle"></i>
+        <span>Connected</span>
+    </div>
+</div>
+
+<!-- New Conversation Modal -->
+<div class="modal" id="new-chat-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>New Conversation</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-search">
+                <input type="text" placeholder="Search matches..." id="match-search">
+            </div>
+            <div class="matches-list">
+                <!-- Matches will be loaded here -->
+                <div class="match-item" data-user-id="4">
+                    <div class="match-avatar">
+                        <img src="{{ url_for('static', filename='img/avatars/4.jpg') }}" alt="David">
+                    </div>
+                    <div class="match-info">
+                        <h4>David Martinez</h4>
+                        <p>Last active: 2 hours ago</p>
+                    </div>
+                    <button class="btn btn-sm btn-outline">Message</button>
+                </div>
+                <div class="match-item" data-user-id="5">
+                    <div class="match-avatar">
+                        <img src="{{ url_for('static', filename='img/avatars/5.jpg') }}" alt="Sophia">
+                    </div>
+                    <div class="match-info">
+                        <h4>Sophia Williams</h4>
+                        <p>Last active: 5 minutes ago</p>
+                    </div>
+                    <button class="btn btn-sm btn-outline">Message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.connection-status {
+    padding: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.connection-status.connected {
+    color: var(--success);
+}
+
+.connection-status.disconnected {
+    color: var(--danger);
+}
+
+.connection-status i {
+    font-size: 0.5rem;
+}
+</style>

@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}Account Settings - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1>Account Settings</h1>
+        <p>Manage your account preferences and settings</p>
+    </div>
+
+    <div class="settings-content">
+        <!-- Account Settings -->
+        <div class="settings-section">
+            <h2>Account Settings</h2>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Email Address</h4>
+                    <p>{{ current_user.email }}</p>
+                </div>
+                <div class="setting-control">
+                    <button class="btn btn-outline" data-action="change-email">Change Email</button>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Password</h4>
+                    <p>Last changed: 3 months ago</p>
+                </div>
+                <div class="setting-control">
+                    <button class="btn btn-outline" data-action="change-password">Change Password</button>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Two-Factor Authentication</h4>
+                    <p>Add an extra layer of security to your account</p>
+                </div>
+                <div class="setting-control">
+                    <label class="switch">
+                        <input type="checkbox" data-setting="Two-Factor Authentication">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Settings -->
+        <div class="settings-section">
+            <h2>Notification Settings</h2>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Email Notifications</h4>
+                    <p>Receive updates and alerts via email</p>
+                </div>
+                <div class="setting-control">
+                    <label class="switch">
+                        <input type="checkbox" checked data-setting="Email Notifications">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Push Notifications</h4>
+                    <p>Receive notifications on your device</p>
+                </div>
+                <div class="setting-control">
+                    <label class="switch">
+                        <input type="checkbox" checked data-setting="Push Notifications">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Match Alerts</h4>
+                    <p>Get notified when you have a new match</p>
+                </div>
+                <div class="setting-control">
+                    <label class="switch">
+                        <input type="checkbox" checked data-setting="Match Alerts">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Message Alerts</h4>
+                    <p>Get notified when you receive new messages</p>
+                </div>
+                <div class="setting-control">
+                    <label class="switch">
+                        <input type="checkbox" checked data-setting="Message Alerts">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Privacy Settings -->
+        <div class="settings-section">
+            <h2>Privacy Settings</h2>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Profile Visibility</h4>
+                    <p>Who can see your profile</p>
+                </div>
+                <div class="setting-control">
+                    <select class="form-control" data-setting="Profile Visibility">
+                        <option value="everyone">Everyone</option>
+                        <option value="matches">Only Matches</option>
+                        <option value="premium">Premium Members Only</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Activity Status</h4>
+                    <p>Show when you were last active</p>
+                </div>
+                <div class="setting-control">
+                    <label class="switch">
+                        <input type="checkbox" checked data-setting="Activity Status">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Read Receipts</h4>
+                    <p>Let others know when you've read their messages</p>
+                </div>
+                <div class="setting-control">
+                    <label class="switch">
+                        <input type="checkbox" checked data-setting="Read Receipts">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Actions -->
+        <div class="settings-section">
+            <h2>Account Actions</h2>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Deactivate Account</h4>
+                    <p>Temporarily hide your profile from others</p>
+                </div>
+                <div class="setting-control">
+                    <button class="btn btn-outline" data-action="deactivate-account">Deactivate</button>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Delete Account</h4>
+                    <p>Permanently delete your account and all data</p>
+                </div>
+                <div class="setting-control">
+                    <button class="btn btn-danger" data-action="delete-account">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}

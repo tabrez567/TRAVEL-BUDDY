@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "name": "Sarah Johnson",
+    "age": 25,
+    "gender": "Female",
+    "location": "New York, NY",
+    "bio": "Love traveling, photography, and trying new restaurants. Looking for someone to share adventures with!",
+    "profile_picture": "/static/img/avatars/sarah.jpg",
+    "interests": ["Travel", "Photography", "Food", "Art", "Music"],
+    "occupation": "Graphic Designer"
+  },
+  {
+    "id": 2,
+    "name": "Mike Chen",
+    "age": 28,
+    "gender": "Male",
+    "location": "San Francisco, CA",
+    "bio": "Tech enthusiast, fitness lover, and coffee addict. Always up for a good conversation!",
+    "profile_picture": "/static/img/avatars/mike.jpg",
+    "interests": ["Technology", "Fitness", "Coffee", "Gaming", "Movies"],
+    "occupation": "Software Engineer"
+  },
+  {
+    "id": 3,
+    "name": "Emma Wilson",
+    "age": 23,
+    "gender": "Female",
+    "location": "Los Angeles, CA",
+    "bio": "Artist, yoga instructor, and nature lover. Seeking meaningful connections and shared experiences.",
+    "profile_picture": "/static/img/avatars/emma.jpg",
+    "interests": ["Art", "Yoga", "Nature", "Meditation", "Reading"],
+    "occupation": "Yoga Instructor"
+  },
+  {
+    "id": 4,
+    "name": "David Rodriguez",
+    "age": 30,
+    "gender": "Male",
+    "location": "Miami, FL",
+    "bio": "Chef, music producer, and beach lover. Life is about good food, good music, and good company!",
+    "profile_picture": "/static/img/avatars/david.jpg",
+    "interests": ["Cooking", "Music", "Beach", "Dancing", "Wine"],
+    "occupation": "Chef"
+  },
+  {
+    "id": 5,
+    "name": "Lisa Thompson",
+    "age": 27,
+    "gender": "Female",
+    "location": "Chicago, IL",
+    "bio": "Marketing professional, dog lover, and fitness enthusiast. Looking for someone who shares my active lifestyle!",
+    "profile_picture": "/static/img/avatars/lisa.jpg",
+    "interests": ["Marketing", "Dogs", "Fitness", "Running", "Volunteering"],
+    "occupation": "Marketing Manager"
+  },
+  {
+    "id": 6,
+    "name": "Alex Kim",
+    "age": 26,
+    "gender": "Male",
+    "location": "Seattle, WA",
+    "bio": "Data scientist, rock climber, and board game enthusiast. Always curious about the world!",
+    "profile_picture": "/static/img/avatars/alex.jpg",
+    "interests": ["Data Science", "Rock Climbing", "Board Games", "Hiking", "Puzzles"],
+    "occupation": "Data Scientist"
+  },
+  {
+    "id": 7,
+    "name": "Jessica Brown",
+    "age": 24,
+    "gender": "Female",
+    "location": "Austin, TX",
+    "bio": "Teacher, musician, and coffee shop regular. Love connecting with people through music and conversation.",
+    "profile_picture": "/static/img/avatars/jessica.jpg",
+    "interests": ["Teaching", "Music", "Coffee", "Books", "Concerts"],
+    "occupation": "Elementary Teacher"
+  },
+  {
+    "id": 8,
+    "name": "Ryan O'Connor",
+    "age": 29,
+    "gender": "Male",
+    "location": "Boston, MA",
+    "bio": "Doctor, marathon runner, and wine connoisseur. Looking for someone to share life's journey with.",
+    "profile_picture": "/static/img/avatars/ryan.jpg",
+    "interests": ["Medicine", "Running", "Wine", "Travel", "Cooking"],
+    "occupation": "Doctor"
+  },
+  {
+    "id": 9,
+    "name": "Maya Patel",
+    "age": 26,
+    "gender": "Female",
+    "location": "Denver, CO",
+    "bio": "Environmental scientist, hiker, and sustainability advocate. Let's explore the outdoors together!",
+    "profile_picture": "/static/img/avatars/maya.jpg",
+    "interests": ["Environment", "Hiking", "Sustainability", "Gardening", "Yoga"],
+    "occupation": "Environmental Scientist"
+  },
+  {
+    "id": 10,
+    "name": "James Taylor",
+    "age": 31,
+    "gender": "Male",
+    "location": "Portland, OR",
+    "bio": "Architect, cyclist, and craft beer enthusiast. Always up for exploring new neighborhoods and breweries!",
+    "profile_picture": "/static/img/avatars/james.jpg",
+    "interests": ["Architecture", "Cycling", "Craft Beer", "Design", "Photography"],
+    "occupation": "Architect"
+  }
+]

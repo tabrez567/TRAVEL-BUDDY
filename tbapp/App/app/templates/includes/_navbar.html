@@ -1,0 +1,170 @@
+<!-- Navigation Bar -->
+<nav class="navbar" id="navbar" {% if not current_user.is_authenticated %}style="display: none;" {% endif %}>
+    <div class="navbar-container">
+        <!-- Logo -->
+        <div class="navbar-brand">
+            <a href="{{ url_for('dashboard.dashboard') }}" class="brand-link">
+                <img src="{{ url_for('static', filename='img/travel_buddy_logo_new.png') }}" alt="Travel Buddy"
+                    class="brand-logo">
+                <span class="brand-text">Travel Buddy</span>
+            </a>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle navigation">
+            <span class="hamburger"></span>
+            <span class="hamburger"></span>
+            <span class="hamburger"></span>
+        </button>
+
+        <!-- Navigation Menu -->
+        {% if current_user.is_authenticated %}
+        <div class="navbar-menu" id="navbar-menu">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="{{ url_for('dashboard.dashboard') }}" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('match.swipe') }}" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Find Travel Buddies</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('trips.my_trips') }}" class="nav-link">
+                        <i class="fas fa-plane"></i>
+                        <span>My Trips</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('trips.search_trips') }}" class="nav-link">
+                        <i class="fas fa-search"></i>
+                        <span>Discover Trips</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('chat.chat') }}" class="nav-link">
+                        <i class="fas fa-comments"></i>
+                        <span>Messages</span>
+                        <span class="badge" id="message-badge">3</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Theme Toggle -->
+            <div class="navbar-theme">
+                <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle theme">
+                    <div class="theme-toggle-inner">
+                        <i class="fas fa-sun theme-icon-light"></i>
+                        <i class="fas fa-moon theme-icon-dark"></i>
+                    </div>
+                    <span class="theme-toggle-text">Theme</span>
+                </button>
+            </div>
+
+            <!-- User Menu -->
+            <div class="navbar-user">
+                <div class="user-menu" id="user-menu">
+                    <button class="user-avatar" id="user-avatar">
+
+                        <span class="user-name">{{ current_user.name }}</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="dropdown-header">
+                            <div class="user-info">
+                                <img src="{{ current_user.profile_picture or url_for('static', filename='img/avatars/default.jpg') }}"
+                                    alt="{{ current_user.name }}" class="dropdown-avatar">
+                                <div class="user-details">
+                                    <h4>{{ current_user.name }}</h4>
+                                    <p>{{ current_user.email }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-menu">
+                            <a href="{{ url_for('profile.profile') }}" class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                <span>My Profile</span>
+                            </a>
+                            <a href="{{ url_for('dashboard.settings') }}" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </a>
+                            <a href="{{ url_for('monetization.plans') }}" class="dropdown-item">
+                                <i class="fas fa-crown"></i>
+                                <span>Upgrade</span>
+                            </a>
+                            <a href="{{ url_for('safety.privacy') }}" class="dropdown-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Privacy & Safety</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="{{ url_for('auth.logout') }}" class="dropdown-item logout">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="notifications" id="notifications">
+                    <button class="notification-btn" id="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-badge">5</span>
+                    </button>
+
+                    <div class="notification-dropdown" id="notification-dropdown">
+                        <div class="notification-header">
+                            <h4>Notifications</h4>
+                            <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                        </div>
+
+                        <div class="notification-list" id="notification-list">
+                            <div class="notification-item unread">
+                                <div class="notification-icon">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p><strong>Sarah</strong> liked your profile</p>
+                                    <span class="notification-time">2 minutes ago</span>
+                                </div>
+                            </div>
+
+                            <div class="notification-item unread">
+                                <div class="notification-icon">
+                                    <i class="fas fa-comment"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p><strong>Mike</strong> sent you a message</p>
+                                    <span class="notification-time">1 hour ago</span>
+                                </div>
+                            </div>
+
+                            <div class="notification-item">
+                                <div class="notification-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p><strong>Emma</strong> super liked you</p>
+                                    <span class="notification-time">3 hours ago</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="notification-footer">
+                            <a href="{{ url_for('notifications.notifications') }}" class="view-all">View all
+                                notifications</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</nav>

@@ -1,0 +1,413 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - Travel Buddy{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="edit-profile-container">
+    <div class="edit-header">
+        <h1>Edit Your Travel Profile</h1>
+        <p>Keep your travel profile updated to find the perfect travel companions</p>
+    </div>
+
+    <form id="profile-form" class="profile-form" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="form-sections">
+            <!-- Basic Information -->
+            <div class="form-section">
+                <h2>Basic Information</h2>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" class="form-control" value="{{ current_user.name }}"
+                            required maxlength="50">
+                        <span class="help-text">This is how you'll appear on Connectify</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age">Age *</label>
+                        <input type="number" id="age" name="age" class="form-control" value="{{ current_user.age }}"
+                            min="18" max="99" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Gender *</label>
+                        <select id="gender" name="gender" class="form-control" required>
+                            <option value="">Select Gender</option>
+                            <option value="male" {% if current_user.gender == 'male' %}selected{% endif %}>Male</option>
+                            <option value="female" {% if current_user.gender == 'female' %}selected{% endif %}>Female</option>
+                            <option value="other" {% if current_user.gender == 'other' %}selected{% endif %}>Other</option>
+                            <option value="prefer_not_to_say" {% if current_user.gender == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location *</label>
+                        <input type="text" id="location" name="location" class="form-control"
+                            value="{{ current_user.location }}" required placeholder="City, State">
+                        <span class="help-text">Your general location helps find nearby matches</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Photos -->
+            <div class="form-section">
+                <h2>Profile Photos</h2>
+                <p>Add at least 3 photos for better matches</p>
+
+                <div class="photos-upload">
+                    <div class="photos-grid">
+                        <div class="photo-upload-item {% if current_user.profile_picture %}has-photo{% endif %}">
+                            <img src="{{ current_user.profile_picture or url_for('static', filename='img/avatars/default.jpg') }}"
+                                alt="Profile Photo" id="profile-preview">
+                            <div class="photo-actions">
+                                <label for="profile-picture" class="btn btn-sm btn-outline">
+                                    <i class="fas fa-camera"></i>
+                                    {% if current_user.profile_picture %}Change{% else %}Add{% endif %}
+                                </label>
+                                <input type="file" id="profile-picture" name="profile_picture" accept="image/*"
+                                    style="display: none;">
+                                {% if current_user.profile_picture %}
+                                <button type="button" class="btn btn-sm btn-danger" onclick="removePhoto('profile')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                            <span class="photo-label">Main Profile Photo</span>
+                        </div>
+
+                        {% for i in range(1, 6) %}
+                        <div class="photo-upload-item">
+                            <div class="photo-placeholder">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Photo {{ i }}</span>
+                            </div>
+                            <div class="photo-actions">
+                                <label for="photo-{{ i }}" class="btn btn-sm btn-outline">
+                                    <i class="fas fa-upload"></i>
+                                    Upload
+                                </label>
+                                <input type="file" id="photo-{{ i }}" name="photo_{{ i }}" accept="image/*"
+                                    style="display: none;">
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="photo-tips">
+                        <h4>Photo Tips</h4>
+                        <ul>
+                            <li>Use clear, high-quality photos</li>
+                            <li>Show your face clearly in the first photo</li>
+                            <li>Include photos of you doing activities you enjoy</li>
+                            <li>Smile! Profiles with smiling photos get more matches</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Me -->
+            <div class="form-section">
+                <h2>About Me</h2>
+
+                <div class="form-group">
+                    <label for="bio">Bio *</label>
+                    <textarea id="bio" name="bio" class="form-control" rows="4"
+                        placeholder="Tell others about yourself, your interests, and what you're looking for..."
+                        maxlength="500">{{ current_user.bio or '' }}</textarea>
+                    <div class="textarea-footer">
+                        <span class="char-count">0/500 characters</span>
+                        <span class="help-text">This is your chance to make a great first impression!</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="occupation">Occupation</label>
+                    <input type="text" id="occupation" name="occupation" class="form-control"
+                        value="{{ current_user.occupation or '' }}" placeholder="What do you do?">
+                </div>
+
+                <div class="form-group">
+                    <label for="education">Education</label>
+                    <input type="text" id="education" name="education" class="form-control"
+                        value="{{ current_user.education or '' }}" placeholder="Where did you study?">
+                </div>
+            </div>
+
+            <!-- Interests -->
+            <div class="form-section">
+                <h2>Travel Interests & Preferences</h2>
+
+                <div class="form-group">
+                    <label>Select Your Interests</label>
+                    <div class="interests-grid">
+                        {% for interest in ['Adventure Travel', 'Cultural Tourism', 'Beach Holidays', 'Mountain Climbing', 'City Exploration', 'Food Tourism', 'Photography', 'Backpacking', 'Luxury Travel', 'Eco Tourism', 'Historical Sites', 'Wildlife Safari', 'Solo Travel', 'Group Travel', 'Business Travel', 'Volunteer Travel', 'Art & Museums', 'Music Festivals', 'Sports Tourism', 'Wellness Retreats'] %}
+                        <div class="interest-checkbox">
+                            <input type="checkbox" name="interests[]" value="{{ interest.lower() }}"
+                                id="interest_{{ loop.index }}" {% if current_user.interests and interest.lower() in current_user.interests.lower() %}checked{% endif %}>
+                            <label for="interest_{{ loop.index }}">
+                                <span class="interest-label">{{ interest }}</span>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lifestyle">Lifestyle</label>
+                    <select id="lifestyle" name="lifestyle" class="form-control">
+                        <option value="">Select Lifestyle</option>
+                        <option value="active" {% if current_user.lifestyle == 'active' %}selected{% endif %}>Active</option>
+                        <option value="moderate" {% if current_user.lifestyle == 'moderate' %}selected{% endif %}>Moderate</option>
+                        <option value="relaxed" {% if current_user.lifestyle == 'relaxed' %}selected{% endif %}>Relaxed</option>
+                        <option value="adventurous" {% if current_user.lifestyle == 'adventurous' %}selected{% endif %}>Adventurous</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="relationship_goals">Relationship Goals</label>
+                    <select id="relationship_goals" name="relationship_goals" class="form-control">
+                        <option value="">What are you looking for?</option>
+                        <option value="long_term" {% if current_user.relationship_goals == 'long_term' %}selected{% endif %}>Long-term relationship</option>
+                        <option value="short_term" {% if current_user.relationship_goals == 'short_term' %}selected{% endif %}>Short-term relationship</option>
+                        <option value="friendship" {% if current_user.relationship_goals == 'friendship' %}selected{% endif %}>New friends</option>
+                        <option value="casual" {% if current_user.relationship_goals == 'casual' %}selected{% endif %}>Casual dating</option>
+                        <option value="not_sure" {% if current_user.relationship_goals == 'not_sure' %}selected{% endif %}>Not sure yet</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Preferences -->
+            <div class="form-section">
+                <h2>Match Preferences</h2>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="preferred_gender">Looking for</label>
+                        <select id="preferred_gender" name="preferred_gender" class="form-control">
+                            <option value="">Any gender</option>
+                            <option value="male" {% if current_user.preferred_gender == 'male' %}selected{% endif %}>Men</option>
+                            <option value="female" {% if current_user.preferred_gender == 'female' %}selected{% endif %}>Women</option>
+                            <option value="all" {% if current_user.preferred_gender == 'all' %}selected{% endif %}>Everyone</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="preferred_age_min">Age Range</label>
+                        <div class="range-inputs">
+                            <select id="preferred_age_min" name="preferred_age_min" class="form-control">
+                                {% for age in range(18, 100) %}
+                                <option value="{{ age }}" {% if current_user.preferred_age_min == age %}selected{% endif %}>{{ age }}</option>
+                                {% endfor %}
+                            </select>
+                            <span>to</span>
+                            <select id="preferred_age_max" name="preferred_age_max" class="form-control">
+                                {% for age in range(18, 100) %}
+                                <option value="{{ age }}" {% if current_user.preferred_age_max == age %}selected{% endif %}>{{ age }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="preferred_distance">Maximum Distance</label>
+                        <select id="preferred_distance" name="preferred_distance" class="form-control">
+                            <option value="5" {% if current_user.preferred_distance == 5 %}selected{% endif %}>5 miles</option>
+                            <option value="10" {% if current_user.preferred_distance == 10 %}selected{% endif %}>10 miles</option>
+                            <option value="25" {% if current_user.preferred_distance == 25 %}selected{% endif %}>25 miles</option>
+                            <option value="50" {% if current_user.preferred_distance == 50 %}selected{% endif %}>50 miles</option>
+                            <option value="100" {% if current_user.preferred_distance == 100 %}selected{% endif %}>100 miles</option>
+                            <option value="any" {% if current_user.preferred_distance == 'any' %}selected{% endif %}>Any distance</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <button type="button" class="btn btn-outline" onclick="previewProfile()">
+                <i class="fas fa-eye"></i>
+                Preview
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i>
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Preview Modal -->
+<div class="modal" id="preview-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Profile Preview</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="profile-preview">
+                <img src="{{ current_user.profile_picture or url_for('static', filename='img/avatars/default.jpg') }}"
+                    alt="Profile Preview" class="preview-image">
+                <h3 id="preview-name">{{ current_user.name }}</h3>
+                <p class="preview-age-location" id="preview-age-location">
+                    {% if current_user.age %}{{ current_user.age }} years • {% endif %}
+                    {% if current_user.location %}{{ current_user.location }}{% endif %}
+                </p>
+                <p class="preview-bio" id="preview-bio">{{ current_user.bio or 'No bio yet' }}</p>
+
+                <div class="preview-interests" id="preview-interests">
+                    {% if current_user.interests %}
+                    {% for interest in current_user.interests.split(',') %}
+                    <span class="interest-tag">{{ interest.strip() }}</span>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+<script>
+    // Edit profile specific functionality
+    document.addEventListener('DOMContentLoaded', function () {
+        // Character counter for bio
+        const bioTextarea = document.getElementById('bio');
+        const charCount = document.querySelector('.char-count');
+
+        if (bioTextarea && charCount) {
+            // Initial count
+            charCount.textContent = bioTextarea.value.length + '/500 characters';
+
+            // Update on input
+            bioTextarea.addEventListener('input', function () {
+                charCount.textContent = this.value.length + '/500 characters';
+
+                // Update preview in real-time
+                if (document.getElementById('preview-bio')) {
+                    document.getElementById('preview-bio').textContent = this.value || 'No bio yet';
+                }
+            });
+        }
+
+        // Photo upload preview
+        const profilePictureInput = document.getElementById('profile-picture');
+        const profilePreview = document.getElementById('profile-preview');
+
+        if (profilePictureInput && profilePreview) {
+            profilePictureInput.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        profilePreview.src = e.target.result;
+                        const item = profilePreview.closest('.photo-upload-item');
+                        if (item) item.classList.add('has-photo');
+
+                        // Update preview modal if open
+                        const previewImage = document.querySelector('.preview-image');
+                        if (previewImage) {
+                            previewImage.src = e.target.result;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Additional photo uploads
+        {% for i in range(1, 6) %}
+        const photoInput{{ i }} = document.getElementById('photo-{{ i }}');
+        if (photoInput{{ i }}) {
+            photoInput{{ i }}.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        const uploadItem = photoInput{{ i }}.closest('.photo-upload-item');
+                        const placeholder = uploadItem.querySelector('.photo-placeholder');
+                        if (placeholder) {
+                            placeholder.innerHTML = `<img src="${event.target.result}" alt="Uploaded photo">`;
+                            uploadItem.classList.add('has-photo');
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        {% endfor %}
+
+        // Real-time preview updates
+        const nameInput = document.getElementById('name');
+        const ageInput = document.getElementById('age');
+        const locationInput = document.getElementById('location');
+
+        if (nameInput) {
+            nameInput.addEventListener('input', function () {
+                if (document.getElementById('preview-name')) {
+                    document.getElementById('preview-name').textContent = this.value;
+                }
+            });
+        }
+
+        if (ageInput && locationInput) {
+            const updateAgeLocation = function () {
+                if (document.getElementById('preview-age-location')) {
+                    let text = '';
+                    if (ageInput.value) text += ageInput.value + ' years • ';
+                    if (locationInput.value) text += locationInput.value;
+                    document.getElementById('preview-age-location').textContent = text;
+                }
+            };
+
+            ageInput.addEventListener('input', updateAgeLocation);
+            locationInput.addEventListener('input', updateAgeLocation);
+        }
+
+        // Interest selection
+        const interestCheckboxes = document.querySelectorAll('.interest-checkbox input');
+        interestCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                updateInterestsPreview();
+            });
+        });
+    });
+
+    function previewProfile() {
+        document.getElementById('preview-modal').style.display = 'flex';
+    }
+
+    function updateInterestsPreview() {
+        const selectedInterests = Array.from(document.querySelectorAll('.interest-checkbox input:checked'))
+            .map(cb => cb.nextElementSibling.textContent);
+
+        const previewContainer = document.getElementById('preview-interests');
+        if (previewContainer) {
+            previewContainer.innerHTML = selectedInterests.map(interest =>
+                `<span class="interest-tag">${interest}</span>`
+            ).join('');
+        }
+    }
+
+    function removePhoto(type) {
+        if (window.confirm('Are you sure you want to remove this photo? This action cannot be undone.')) {
+            if (type === 'profile') {
+                const preview = document.getElementById('profile-preview');
+                if (preview) {
+                    preview.src = "{{ url_for('static', filename='img/avatars/default.jpg') }}";
+                    const item = preview.closest('.photo-upload-item');
+                    if (item) item.classList.remove('has-photo');
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

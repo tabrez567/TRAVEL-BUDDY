@@ -1,0 +1,273 @@
+<a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-secondary">
+    <i class="fas fa-tachometer-alt"></i>
+    Dashboard
+</a>{% extends "base.html" %}
+
+{% block title %}My Profile - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <div class="avatar-container">
+                <img src="{{ current_user.profile_picture or url_for('static', filename='img/avatars/default.jpg') }}" 
+                     alt="{{ current_user.name }}" id="profile-avatar-img">
+                <div class="avatar-overlay"></div>
+            </div>
+            <div class="avatar-actions">
+                <button class="btn btn-sm btn-outline" id="change-avatar-btn">
+                    <i class="fas fa-camera"></i>
+                    Change Photo
+                </button>
+            </div>
+            {% if current_user.is_verified %}
+            <div class="verification-badge" title="Verified Profile">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="profile-info">
+            <h1>{{ current_user.name }}</h1>
+            <p class="profile-age-location">
+                {% if current_user.age %}{{ current_user.age }} years • {% endif %}
+                {% if current_user.location %}{{ current_user.location }}{% endif %}
+            </p>
+            
+            <div class="profile-verification-status {% if current_user.is_verified %}verified{% else %}not-verified{% endif %}">
+                {% if current_user.is_verified %}
+                <i class="fas fa-check-circle"></i> Verified
+                {% else %}
+                <a href="{{ url_for('profile.verify') }}">
+                    <i class="fas fa-exclamation-circle"></i> Verify Now
+                </a>
+                {% endif %}
+            </div>
+            
+            {% if current_user.occupation %}
+            <p class="profile-occupation">
+                <i class="fas fa-briefcase"></i>
+                {{ current_user.occupation }}
+            </p>
+            {% endif %}
+            
+            <div class="profile-stats">
+                <div class="stat">
+                    <div class="stat-icon"><i class="fas fa-heart"></i></div>
+                    <strong>42</strong>
+                    <span>Matches</span>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon"><i class="fas fa-comment"></i></div>
+                    <strong>127</strong>
+                    <span>Conversations</span>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon"><i class="fas fa-reply"></i></div>
+                    <strong>89%</strong>
+                    <span>Response Rate</span>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <a href="{{ url_for('profile.edit') }}" class="btn btn-primary btn-icon-pulse">
+                    <i class="fas fa-edit"></i>
+                    Edit Profile
+                </a>
+                {% if not current_user.is_verified %}
+                <a href="{{ url_for('profile.verify') }}" class="btn btn-outline btn-icon-pulse">
+                    <i class="fas fa-check-circle"></i>
+                    Verify Profile
+                </a>
+                {% endif %}
+                <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="profile-content">
+        <!-- Left Column -->
+        <div class="profile-left">
+            <!-- About Section -->
+            <div class="profile-section">
+                <h3>About Me</h3>
+                <div class="section-content">
+                    {% if current_user.bio %}
+                    <p>{{ current_user.bio }}</p>
+                    {% else %}
+                    <p class="text-muted">No bio yet. <a href="{{ url_for('profile.edit') }}">Add one</a> to tell others about yourself.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Interests Section -->
+            <div class="profile-section">
+                <h3>Interests</h3>
+                <div class="section-content">
+                    {% if current_user.interests %}
+                    <div class="interests-list">
+                        {% for interest in current_user.interests.split(',') %}
+                        <span class="interest-tag">{{ interest.strip() }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No interests added yet. <a href="{{ url_for('profile.edit') }}">Add some</a> to find better matches.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Preferences Section -->
+            <div class="profile-section">
+                <h3>Preferences</h3>
+                <div class="section-content">
+                    <div class="preferences-grid">
+                        <div class="preference-item">
+                            <label>Looking for</label>
+                            <span>{{ current_user.preferred_gender or 'Not specified' }}</span>
+                        </div>
+                        <div class="preference-item">
+                            <label>Age range</label>
+                            <span>{{ current_user.preferred_age_min or '18' }} - {{ current_user.preferred_age_max or '99' }}</span>
+                        </div>
+                        <div class="preference-item">
+                            <label>Location</label>
+                            <span>{{ current_user.preferred_location or 'Anywhere' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="profile-right">
+            <!-- Profile Completeness -->
+            <div class="profile-card">
+                <h4>Profile Completeness</h4>
+                <div class="completeness-meter">
+                    <div class="progress-circle large" data-percent="75">
+                        <span>75%</span>
+                    </div>
+                    <div class="completeness-info">
+                        <p>Complete your profile to get more matches and better recommendations.</p>
+                        <div class="progress-tips">
+                            <div class="tip-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Basic Info</span>
+                            </div>
+                            <div class="tip-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Profile Picture</span>
+                            </div>
+                            <div class="tip-item incomplete">
+                                <i class="fas fa-circle"></i>
+                                <span>Add Bio</span>
+                            </div>
+                            <div class="tip-item incomplete">
+                                <i class="fas fa-circle"></i>
+                                <span>Add Interests</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('profile.edit') }}" class="btn btn-primary btn-sm btn-icon-pulse">Complete Profile</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification Status -->
+            <div class="profile-card">
+                <h4>Verification Status</h4>
+                <div class="verification-status">
+                    {% if current_user.is_verified %}
+                    <div class="status-item verified">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Profile Verified</span>
+                    </div>
+                    {% else %}
+                    <div class="status-item pending">
+                        <i class="fas fa-clock"></i>
+                        <span>Not Verified</span>
+                    </div>
+                    <p>Verify your profile to build trust and get more matches.</p>
+                    <a href="{{ url_for('profile.verify') }}" class="btn btn-outline btn-sm">Verify Now</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="profile-card">
+                <h4>This Week</h4>
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-eye"></i>
+                        <div>
+                            <strong>28</strong>
+                            <span>Profile Views</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-heart"></i>
+                        <div>
+                            <strong>7</strong>
+                            <span>New Matches</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-comment"></i>
+                        <div>
+                            <strong>12</strong>
+                            <span>Messages</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change Avatar Modal -->
+<div class="modal" id="avatar-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Change Profile Picture</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="avatar-options">
+                <div class="option-upload">
+                    <h4>Upload Photo</h4>
+                    <p>Select a photo from your device</p>
+                    <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+                    <button class="btn btn-primary" onclick="document.getElementById('avatar-upload').click()">
+                        Choose File
+                    </button>
+                </div>
+                <div class="option-presets">
+                    <h4>Choose from Presets</h4>
+                    <div class="preset-avatars">
+                        {% for i in range(1, 9) %}
+                        <img src="{{ url_for('static', filename='img/avatars/' ~ i ~ '.jpg') }}" 
+                             alt="Avatar {{ i }}" class="preset-avatar" data-avatar="{{ i }}">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" data-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" id="save-avatar-btn">Save Changes</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}

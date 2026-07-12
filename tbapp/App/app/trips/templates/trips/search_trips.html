@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Search Trips - Travel Buddy{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2>Discover Trips</h2>
+            
+            <!-- Search Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="GET">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="q">Search</label>
+                                    <input type="text" class="form-control" id="q" name="q" value="{{ query }}" placeholder="Trip title or description">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="destination">Destination</label>
+                                    <input type="text" class="form-control" id="destination" name="destination" value="{{ destination }}" placeholder="City or country">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="start_date">Start Date</label>
+                                    <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="travel_style">Travel Style</label>
+                                    <select class="form-control" id="travel_style" name="travel_style">
+                                        <option value="">Any style</option>
+                                        <option value="budget" {{ 'selected' if travel_style == 'budget' }}>Budget</option>
+                                        <option value="luxury" {{ 'selected' if travel_style == 'luxury' }}>Luxury</option>
+                                        <option value="backpacker" {{ 'selected' if travel_style == 'backpacker' }}>Backpacker</option>
+                                        <option value="business" {{ 'selected' if travel_style == 'business' }}>Business</option>
+                                        <option value="family" {{ 'selected' if travel_style == 'family' }}>Family</option>
+                                        <option value="adventure" {{ 'selected' if travel_style == 'adventure' }}>Adventure</option>
+                                        <option value="cultural" {{ 'selected' if travel_style == 'cultural' }}>Cultural</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a href="{{ url_for('trips.search_trips') }}" class="btn btn-outline-secondary">Clear</a>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Search Results -->
+            <div class="row">
+                {% if trips %}
+                    {% for trip in trips %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ trip.title }}</h5>
+                                <p class="card-text text-muted">
+                                    <i class="fas fa-map-marker-alt"></i> {{ trip.destination }}
+                                </p>
+                                <p class="card-text">
+                                    <i class="fas fa-calendar"></i> 
+                                    {{ trip.start_date.strftime('%B %d, %Y') }} - 
+                                    {{ trip.end_date.strftime('%B %d, %Y') }}
+                                </p>
+                                {% if trip.budget %}
+                                <p class="card-text">
+                                    <i class="fas fa-dollar-sign"></i> Budget: ${{ "%.2f"|format(trip.budget) }}
+                                </p>
+                                {% endif %}
+                                {% if trip.travel_style %}
+                                <p class="card-text">
+                                    <span class="badge badge-info">{{ trip.travel_style.title() }}</span>
+                                </p>
+                                {% endif %}
+                                <p class="card-text">
+                                    <span class="badge badge-{{ 'success' if trip.status == 'confirmed' else 'warning' }}">
+                                        {{ trip.status.title() }}
+                                    </span>
+                                </p>
+                                {% if trip.description %}
+                                <p class="card-text">{{ trip.description[:100] }}{% if trip.description|length > 100 %}...{% endif %}</p>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ url_for('trips.trip_details', trip_id=trip.id) }}" class="btn btn-primary btn-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="text-center py-5">
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <h4 class="text-muted">No trips found</h4>
+                            <p class="text-muted">Try adjusting your search criteria or create your own trip!</p>
+                            <a href="{{ url_for('trips.create_trip') }}" class="btn btn-primary">
+                                Create New Trip
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

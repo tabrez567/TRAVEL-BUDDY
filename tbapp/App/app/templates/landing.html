@@ -1,0 +1,209 @@
+{% extends "landing-base.html" %}
+
+{% block title %}Travel Buddy - Find Your Perfect Travel Companion{% endblock %}
+
+{% block content %}
+<section class="landing-hero">
+    <div class="background-animation">
+        <div class="css-animation-layer"></div>
+        <div class="flying-plane-container">
+            <i class="fas fa-plane plane-1"></i>
+            <i class="fas fa-plane plane-2"></i>
+            <i class="fas fa-plane plane-3"></i>
+            <i class="fas fa-plane plane-4"></i>
+            <i class="fas fa-plane plane-5"></i>
+        </div>
+    </div>
+    <div class="landing-overlay"></div>
+    <div class="landing-inner">
+        <h1 class="landing-title animate-fade-in-up">Travel Buddy</h1>
+        <p class="landing-desc animate-fade-in-up delay-100">Find travel companions, plan adventures, and make meaningful connections worldwide.</p>
+        <div class="hero-buttons animate-fade-in-up delay-200">
+            <a href="{{ url_for('auth.login') }}" class="btn-primary">Get Started</a>
+            <a href="#why-travel-buddy" class="btn-secondary">Learn More</a>
+        </div>
+    </div>
+    <div class="scroll-indicator animate-bounce">
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</section>
+
+<!-- Why Travel Buddy Section -->
+<section class="landing-about" id="why-travel-buddy">
+    <div class="about-container">
+        <div class="section-header text-center">
+            <span class="section-badge">What We Offer</span>
+            <h2 class="about-title">Why Travel Buddy?</h2>
+            <p class="about-desc">Your ultimate companion for exploring the world together.</p>
+        </div>
+
+        <div class="about-grid">
+            <div class="about-item">
+                <div class="about-icon-wrapper gradient-blue">
+                    <i class="fas fa-globe-americas about-icon"></i>
+                </div>
+                <h3>Explore Destinations</h3>
+                <p>Discover new destinations and hidden gems with local insights from experienced travelers.</p>
+            </div>
+            <div class="about-item">
+                <div class="about-icon-wrapper gradient-purple">
+                    <i class="fas fa-users about-icon"></i>
+                </div>
+                <h3>Connect & Meet</h3>
+                <p>Meet like-minded travelers and make lifelong friendships with people who share your passion.</p>
+            </div>
+            <div class="about-item">
+                <div class="about-icon-wrapper gradient-green">
+                    <i class="fas fa-route about-icon"></i>
+                </div>
+                <h3>Plan Together</h3>
+                <p>Organize your trips with ease and flexibility through shared itineraries and group planning.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="landing-features">
+    <div class="features-container">
+        <div class="section-header text-center">
+            <span class="section-badge">Features</span>
+            <h2 class="features-title">Everything You Need for Travel</h2>
+            <p class="features-desc">Comprehensive tools designed to make group travel planning effortless.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+                <h3>Smart Matching</h3>
+                <p>AI-powered matching algorithm connects you with compatible travel companions based on preferences and interests.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Real-time Chat</h3>
+                <p>Instantly communicate with travel mates, plan activities, and share updates in real-time.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h3>Itinerary Builder</h3>
+                <p>Create and share detailed travel itineraries with your group and get everyone on the same page.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Safety First</h3>
+                <p>Verified profiles and safety features ensure you're connecting with trustworthy fellow travelers.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h3>Expense Tracking</h3>
+                <p>Easily split costs and track expenses to keep finances transparent among travel group members.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3>Ratings & Reviews</h3>
+                <p>Build your travel reputation through reviews from fellow travelers you've journeyed with.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="landing-how-it-works">
+    <div class="how-container">
+        <div class="section-header text-center">
+            <span class="section-badge">Simple Process</span>
+            <h2 class="how-title">How It Works</h2>
+            <p class="how-desc">Get started in just a few simple steps.</p>
+        </div>
+
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Create Profile</h3>
+                <p>Sign up and build your travel profile with your interests and travel style.</p>
+                <div class="step-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Discover Matches</h3>
+                <p>Browse compatible travelers and find your perfect travel companions.</p>
+                <div class="step-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Connect & Chat</h3>
+                <p>Reach out through our chat feature and start planning your adventure.</p>
+                <div class="step-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h3>Travel Together</h3>
+                <p>Enjoy an unforgettable journey with your new travel companions!</p>
+                <div class="step-icon">
+                    <i class="fas fa-plane"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="landing-cta">
+    <div class="cta-content">
+        <h2 class="cta-title">Ready to Start Your Adventure?</h2>
+        <p class="cta-desc">Join thousands of travelers finding their perfect companions</p>
+        <div class="cta-buttons">
+            <a href="{{ url_for('auth.login') }}" class="btn-primary btn-large">Sign Up Now</a>
+            <a href="#why-travel-buddy" class="btn-secondary btn-large">Learn More</a>
+        </div>
+    </div>
+    <div class="cta-background">
+        <i class="fas fa-plane cta-plane-1"></i>
+        <i class="fas fa-plane cta-plane-2"></i>
+        <i class="fas fa-plane cta-plane-3"></i>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="landing-stats">
+    <div class="stats-container">
+        <div class="stat-box">
+            <div class="stat-number">50K+</div>
+            <div class="stat-label">Active Travelers</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">150+</div>
+            <div class="stat-label">Countries</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">100K+</div>
+            <div class="stat-label">Trips Planned</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">4.8★</div>
+            <div class="stat-label">User Rating</div>
+        </div>
+    </div>
+</section>
+{% endblock %}

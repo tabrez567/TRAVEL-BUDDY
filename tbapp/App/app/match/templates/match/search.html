@@ -1,0 +1,405 @@
+{% extends "base.html" %}
+
+{% block title %}Search Matches - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/match.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <div class="search-header">
+        <h1>Find Your Match</h1>
+        <p>Use filters to find exactly what you're looking for</p>
+    </div>
+
+    <div class="search-content">
+        <!-- Search Filters -->
+        <div class="search-filters">
+            <div class="filters-card">
+                <h3>Filters</h3>
+                
+                <!-- Basic Filters -->
+                <div class="filter-group">
+                    <h4>Basic Criteria</h4>
+                    
+                    <div class="filter-item">
+                        <label>Age Range</label>
+                        <div class="range-slider">
+                            <input type="range" min="18" max="99" value="25" id="age-min">
+                            <input type="range" min="18" max="99" value="35" id="age-max">
+                            <div class="range-values">
+                                <span id="age-min-value">25</span> - <span id="age-max-value">35</span> years
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-item">
+                        <label>Gender</label>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" name="gender" value="female" checked>
+                                <span>Women</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="gender" value="male" checked>
+                                <span>Men</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="gender" value="other">
+                                <span>Other</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-item">
+                        <label>Location</label>
+                        <select class="form-control" id="location-filter">
+                            <option value="">Anywhere</option>
+                            <option value="5">Within 5 miles</option>
+                            <option value="10">Within 10 miles</option>
+                            <option value="25">Within 25 miles</option>
+                            <option value="50">Within 50 miles</option>
+                            <option value="100">Within 100 miles</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Advanced Filters -->
+                <div class="filter-group">
+                    <h4>Advanced Criteria</h4>
+                    
+                    <div class="filter-item">
+                        <label>Interests</label>
+                        <div class="interests-select">
+                            <select multiple class="form-control" id="interests-filter">
+                                <option value="travel">Travel</option>
+                                <option value="music">Music</option>
+                                <option value="sports">Sports</option>
+                                <option value="food">Food & Cooking</option>
+                                <option value="art">Art & Culture</option>
+                                <option value="fitness">Fitness</option>
+                                <option value="technology">Technology</option>
+                                <option value="reading">Reading</option>
+                                <option value="movies">Movies</option>
+                                <option value="outdoors">Outdoors</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-item">
+                        <label>Relationship Goals</label>
+                        <select class="form-control" id="goals-filter">
+                            <option value="">Any</option>
+                            <option value="dating">Dating</option>
+                            <option value="relationship">Relationship</option>
+                            <option value="marriage">Marriage</option>
+                            <option value="friendship">Friendship</option>
+                            <option value="casual">Casual</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <label>Education Level</label>
+                        <select class="form-control" id="education-filter">
+                            <option value="">Any</option>
+                            <option value="high_school">High School</option>
+                            <option value="some_college">Some College</option>
+                            <option value="bachelors">Bachelor's Degree</option>
+                            <option value="masters">Master's Degree</option>
+                            <option value="doctorate">Doctorate</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <label>Occupation</label>
+                        <input type="text" class="form-control" id="occupation-filter" 
+                               placeholder="e.g., Engineer, Teacher, Artist">
+                    </div>
+                </div>
+
+                <!-- Lifestyle Filters -->
+                <div class="filter-group">
+                    <h4>Lifestyle</h4>
+                    
+                    <div class="filter-item">
+                        <label>Smoking</label>
+                        <select class="form-control" id="smoking-filter">
+                            <option value="">Any</option>
+                            <option value="never">Never</option>
+                            <option value="sometimes">Sometimes</option>
+                            <option value="regularly">Regularly</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <label>Drinking</label>
+                        <select class="form-control" id="drinking-filter">
+                            <option value="">Any</option>
+                            <option value="never">Never</option>
+                            <option value="socially">Socially</option>
+                            <option value="regularly">Regularly</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <label>Exercise</label>
+                        <select class="form-control" id="exercise-filter">
+                            <option value="">Any</option>
+                            <option value="never">Never</option>
+                            <option value="occasionally">Occasionally</option>
+                            <option value="regularly">Regularly</option>
+                            <option value="daily">Daily</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Filter Actions -->
+                <div class="filter-actions">
+                    <button class="btn btn-outline" id="reset-filters">Reset All</button>
+                    <button class="btn btn-primary" id="apply-filters">Apply Filters</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        <div class="search-results">
+            <div class="results-header">
+                <h3>Search Results</h3>
+                <div class="results-info">
+                    <span id="results-count">24</span> matches found
+                    <select class="form-control-sm" id="sort-results">
+                        <option value="relevance">Relevance</option>
+                        <option value="distance">Distance</option>
+                        <option value="activity">Recent Activity</option>
+                        <option value="compatibility">Compatibility</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="results-grid" id="results-grid">
+                <!-- Results will be loaded here -->
+                
+                <!-- Sample result cards -->
+                <div class="result-card">
+                    <div class="result-image">
+                        <img src="{{ url_for('static', filename='img/profiles/3/1.jpg') }}" alt="Sophia">
+                        <div class="result-distance">5 miles away</div>
+                    </div>
+                    <div class="result-info">
+                        <h4>Sophia, 25</h4>
+                        <p class="result-location">Chicago, IL</p>
+                        <p class="result-bio">Art enthusiast and dog mom. Looking for someone who doesn't mind a little fur.</p>
+                        <div class="result-interests">
+                            <span class="interest-tag">Art</span>
+                            <span class="interest-tag">Dogs</span>
+                            <span class="interest-tag">Yoga</span>
+                        </div>
+                        <div class="result-actions">
+                            <button class="btn btn-sm btn-outline">View Profile</button>
+                            <button class="btn btn-sm btn-primary">Like</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-image">
+                        <img src="{{ url_for('static', filename='img/profiles/4/1.jpg') }}" alt="David">
+                        <div class="result-distance">12 miles away</div>
+                    </div>
+                    <div class="result-info">
+                        <h4>David, 30</h4>
+                        <p class="result-location">Miami, FL</p>
+                        <p class="result-bio">Professional dancer and fitness instructor. Let's dance through life together.</p>
+                        <div class="result-interests">
+                            <span class="interest-tag">Dancing</span>
+                            <span class="interest-tag">Fitness</span>
+                            <span class="interest-tag">Beach</span>
+                        </div>
+                        <div class="result-actions">
+                            <button class="btn btn-sm btn-outline">View Profile</button>
+                            <button class="btn btn-sm btn-primary">Like</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="btn btn-outline" disabled>Previous</button>
+                <span class="page-info">Page 1 of 5</span>
+                <button class="btn btn-outline">Next</button>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-results" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>No results found</h3>
+                <p>Try adjusting your filters to see more matches.</p>
+                <button class="btn btn-primary" id="adjust-filters">Adjust Filters</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick View Modal -->
+<div class="modal" id="quick-view-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Quick Profile</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Profile preview will be loaded here -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" data-dismiss="modal">Close</button>
+            <button class="btn btn-primary">View Full Profile</button>
+            <button class="btn btn-danger">Like</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/match.js') }}"></script>
+<script>
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Age range slider
+    const ageMin = document.getElementById('age-min');
+    const ageMax = document.getElementById('age-max');
+    const ageMinValue = document.getElementById('age-min-value');
+    const ageMaxValue = document.getElementById('age-max-value');
+    
+    function updateAgeRange() {
+        ageMinValue.textContent = ageMin.value;
+        ageMaxValue.textContent = ageMax.value;
+        
+        // Ensure min is never greater than max
+        if (parseInt(ageMin.value) > parseInt(ageMax.value)) {
+            ageMin.value = ageMax.value;
+        }
+    }
+    
+    if (ageMin && ageMax) {
+        ageMin.addEventListener('input', updateAgeRange);
+        ageMax.addEventListener('input', updateAgeRange);
+        updateAgeRange();
+    }
+    
+    // Multi-select interests
+    const interestsFilter = document.getElementById('interests-filter');
+    if (interestsFilter) {
+        new MultiSelect(interestsFilter, {
+            placeholder: 'Select interests',
+            search: true
+        });
+    }
+    
+    // Reset filters
+    document.getElementById('reset-filters').addEventListener('click', function() {
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.checked = true;
+        });
+        document.querySelectorAll('select').forEach(select => {
+            select.selectedIndex = 0;
+        });
+        document.querySelectorAll('input[type="range"]').forEach(range => {
+            if (range.id === 'age-min') range.value = 18;
+            if (range.id === 'age-max') range.value = 99;
+        });
+        updateAgeRange();
+    });
+    
+    // Apply filters
+    document.getElementById('apply-filters').addEventListener('click', function() {
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Applying...';
+        this.disabled = true;
+        
+        setTimeout(() => {
+            performSearch();
+            this.innerHTML = 'Apply Filters';
+            this.disabled = false;
+        }, 1000);
+    });
+    
+    // Adjust filters button
+    document.getElementById('adjust-filters').addEventListener('click', function() {
+        document.querySelector('.search-filters').scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+    
+    function performSearch() {
+        // In a real app, this would send a request to the server
+        console.log('Performing search with current filters');
+        
+        // Simulate search results
+        const resultsGrid = document.getElementById('results-grid');
+        const emptyState = document.getElementById('empty-results');
+        
+        if (Math.random() > 0.3) {
+            resultsGrid.style.display = 'grid';
+            emptyState.style.display = 'none';
+        } else {
+            resultsGrid.style.display = 'none';
+            emptyState.style.display = 'block';
+        }
+    }
+    
+    // Quick view functionality
+    document.querySelectorAll('.result-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            if (!e.target.closest('.result-actions')) {
+                showQuickView(this);
+            }
+        });
+    });
+    
+    function showQuickView(card) {
+        const modal = document.getElementById('quick-view-modal');
+        const modalBody = modal.querySelector('.modal-body');
+        
+        // Populate modal with card data
+        const image = card.querySelector('img').src;
+        const name = card.querySelector('h4').textContent;
+        const location = card.querySelector('.result-location').textContent;
+        const bio = card.querySelector('.result-bio').textContent;
+        
+        modalBody.innerHTML = `
+            <div class="quick-view-content">
+                <img src="${image}" alt="${name}" class="quick-view-image">
+                <h4>${name}</h4>
+                <p class="quick-view-location">${location}</p>
+                <p class="quick-view-bio">${bio}</p>
+            </div>
+        `;
+        
+        modal.style.display = 'flex';
+    }
+    
+    // Sort results
+    document.getElementById('sort-results').addEventListener('change', function() {
+        performSearch();
+    });
+});
+
+// Simple multi-select implementation
+class MultiSelect {
+    constructor(select, options) {
+        this.select = select;
+        this.options = options;
+        this.init();
+    }
+    
+    init() {
+        // Create multi-select interface
+        // This would be a full implementation in a real app
+        console.log('Multi-select initialized');
+    }
+}
+</script>
+{% endblock %}

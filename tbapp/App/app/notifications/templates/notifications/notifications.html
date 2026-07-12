@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/notifications.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="notifications-container">
+    <div class="notifications-header">
+        <h1>Notifications</h1>
+        <div class="header-actions">
+            <button class="btn btn-outline btn-sm" id="mark-all-read">
+                <i class="fas fa-check-double"></i>
+                Mark all as read
+            </button>
+            <button class="btn btn-outline btn-sm" id="clear-all">
+                <i class="fas fa-trash"></i>
+                Clear all
+            </button>
+        </div>
+    </div>
+
+    <div class="notifications-filters">
+        <div class="filter-group">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="unread">Unread</button>
+            <button class="filter-btn" data-filter="likes">Likes</button>
+            <button class="filter-btn" data-filter="matches">Matches</button>
+            <button class="filter-btn" data-filter="messages">Messages</button>
+        </div>
+    </div>
+
+    <div class="notifications-list" id="notifications-list">
+        <!-- Notifications will be loaded here -->
+    </div>
+
+    <div class="notifications-empty" id="empty-state">
+        <div class="empty-icon">
+            <i class="fas fa-bell-slash"></i>
+        </div>
+        <h3>No notifications yet</h3>
+        <p>Your notifications will appear here when you receive likes, matches, or messages.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+{% endblock %}

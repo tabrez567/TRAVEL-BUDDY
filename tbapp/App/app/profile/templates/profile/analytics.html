@@ -1,0 +1,516 @@
+{% extends "base.html" %}
+
+{% block title %}Profile Analytics - Connectify{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="analytics-container">
+    <div class="analytics-header">
+        <h1>Profile Analytics</h1>
+        <p>Track your dating performance and optimize your profile</p>
+    </div>
+
+    <!-- Overview Stats -->
+    <div class="analytics-overview">
+        <div class="overview-stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>1,247</h3>
+                    <p>Total Profile Views</p>
+                    <span class="stat-trend positive">+12% this week</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>89</h3>
+                    <p>Total Likes Received</p>
+                    <span class="stat-trend positive">+8% this week</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>42</h3>
+                    <p>Conversations Started</p>
+                    <span class="stat-trend positive">+15% this week</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>7.1%</h3>
+                    <p>Match Rate</p>
+                    <span class="stat-trend positive">+2.3% improvement</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="analytics-charts">
+        <div class="chart-row">
+            <!-- Profile Views Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Profile Views Over Time</h3>
+                    <select class="chart-timeframe" id="views-timeframe">
+                        <option value="7">Last 7 days</option>
+                        <option value="30" selected>Last 30 days</option>
+                        <option value="90">Last 90 days</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="viewsChart" height="250"></canvas>
+                </div>
+            </div>
+
+            <!-- Likes vs Matches Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Likes vs Matches</h3>
+                    <select class="chart-timeframe" id="likes-timeframe">
+                        <option value="7">Last 7 days</option>
+                        <option value="30" selected>Last 30 days</option>
+                        <option value="90">Last 90 days</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="likesChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-row">
+            <!-- Response Rate Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Response Rates</h3>
+                    <select class="chart-timeframe" id="response-timeframe">
+                        <option value="7">Last 7 days</option>
+                        <option value="30" selected>Last 30 days</option>
+                        <option value="90">Last 90 days</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="responseChart" height="250"></canvas>
+                </div>
+            </div>
+
+            <!-- Demographic Reach -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Demographic Reach</h3>
+                    <select class="chart-timeframe" id="demographic-timeframe">
+                        <option value="age">By Age</option>
+                        <option value="location">By Location</option>
+                        <option value="interest">By Interest</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="demographicChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Metrics -->
+    <div class="performance-metrics">
+        <h2>Performance Metrics</h2>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h4>Profile Completion Score</h4>
+                <div class="metric-value">
+                    <div class="progress-circle" data-percent="85">
+                        <span>85%</span>
+                    </div>
+                </div>
+                <p>Complete your profile to get more matches</p>
+                <a href="{{ url_for('profile.edit') }}" class="btn btn-sm btn-outline">Improve Profile</a>
+            </div>
+
+            <div class="metric-card">
+                <h4>Photo Performance</h4>
+                <div class="metric-value">
+                    <span class="score">8.2/10</span>
+                </div>
+                <p>Your photos are performing well</p>
+                <button class="btn btn-sm btn-outline">Optimize Photos</button>
+            </div>
+
+            <div class="metric-card">
+                <h4>Bio Effectiveness</h4>
+                <div class="metric-value">
+                    <span class="score">7.5/10</span>
+                </div>
+                <p>Your bio could be more engaging</p>
+                <button class="btn btn-sm btn-outline">Edit Bio</button>
+            </div>
+
+            <div class="metric-card">
+                <h4>Response Time</h4>
+                <div class="metric-value">
+                    <span class="score">2.3h</span>
+                </div>
+                <p>Average response time to messages</p>
+                <span class="metric-trend positive">Faster than average</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optimization Tips -->
+    <div class="optimization-tips">
+        <h2>Optimization Tips</h2>
+        
+        <div class="tips-grid">
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h4>Improve Your Photos</h4>
+                <p>Add more high-quality photos showing different aspects of your life. Photos with smiles perform 40% better.</p>
+                <ul>
+                    <li>Add a full-body photo</li>
+                    <li>Include photos with friends</li>
+                    <li>Show yourself doing activities</li>
+                </ul>
+                <button class="btn btn-sm btn-primary">Update Photos</button>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-pencil-alt"></i>
+                </div>
+                <h4>Enhance Your Bio</h4>
+                <p>Your bio is 30% shorter than optimal. Add more details about your interests and what you're looking for.</p>
+                <ul>
+                    <li>Mention specific hobbies</li>
+                    <li>Add what you're looking for</li>
+                    <li>Include conversation starters</li>
+                </ul>
+                <button class="btn btn-sm btn-primary">Edit Bio</button>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h4>Peak Activity Times</h4>
+                <p>Your profile gets the most views between 7-9 PM. Try to be active during these hours for better engagement.</p>
+                <ul>
+                    <li>Evening: 7-9 PM (peak)</li>
+                    <li>Lunch: 12-1 PM (good)</li>
+                    <li>Weekends: 10 AM-12 PM (good)</li>
+                </ul>
+                <button class="btn btn-sm btn-outline">Set Reminders</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison Metrics -->
+    <div class="comparison-metrics">
+        <h2>How You Compare</h2>
+        
+        <div class="comparison-grid">
+            <div class="comparison-item">
+                <span class="metric-name">Profile Views</span>
+                <div class="comparison-bar">
+                    <div class="your-score" style="width: 75%"></div>
+                    <div class="average-score" style="width: 60%"></div>
+                </div>
+                <span class="comparison-value">25% above average</span>
+            </div>
+
+            <div class="comparison-item">
+                <span class="metric-name">Like Rate</span>
+                <div class="comparison-bar">
+                    <div class="your-score" style="width: 65%"></div>
+                    <div class="average-score" style="width: 50%"></div>
+                </div>
+                <span class="comparison-value">15% above average</span>
+            </div>
+
+            <div class="comparison-item">
+                <span class="metric-name">Response Rate</span>
+                <div class="comparison-bar">
+                    <div class="your-score" style="width: 80%"></div>
+                    <div class="average-score" style="width: 55%"></div>
+                </div>
+                <span class="comparison-value">25% above average</span>
+            </div>
+
+            <div class="comparison-item">
+                <span class="metric-name">Match Rate</span>
+                <div class="comparison-bar">
+                    <div class="your-score" style="width: 70%"></div>
+                    <div class="average-score" style="width: 45%"></div>
+                </div>
+                <span class="comparison-value">25% above average</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Options -->
+    <div class="export-section">
+        <h2>Export Data</h2>
+        <p>Download your analytics data for further analysis</p>
+        
+        <div class="export-options">
+            <button class="btn btn-outline">
+                <i class="fas fa-file-csv"></i>
+                Export as CSV
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-file-excel"></i>
+                Export as Excel
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-file-pdf"></i>
+                Export as PDF Report
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Photo Optimization Modal -->
+<div class="modal" id="photo-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Photo Optimization</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="photo-analysis">
+                <h4>Your Photo Analysis</h4>
+                <div class="photo-scores">
+                    <div class="photo-score">
+                        <img src="{{ url_for('static', filename='img/profiles/1/1.jpg') }}" alt="Main Photo">
+                        <span class="score">9.2/10</span>
+                        <span class="label">Primary</span>
+                    </div>
+                    <div class="photo-score">
+                        <img src="{{ url_for('static', filename='img/profiles/1/2.jpg') }}" alt="Secondary Photo">
+                        <span class="score">7.8/10</span>
+                        <span class="label">Secondary</span>
+                    </div>
+                    <div class="photo-score">
+                        <img src="{{ url_for('static', filename='img/profiles/1/3.jpg') }}" alt="Third Photo">
+                        <span class="score">6.5/10</span>
+                        <span class="label">Needs improvement</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-tips">
+                <h4>Improvement Tips</h4>
+                <ul>
+                    <li>Replace low-scoring photos with higher quality images</li>
+                    <li>Add variety: include photos with different backgrounds</li>
+                    <li>Ensure good lighting in all photos</li>
+                    <li>Smile more in photos - it increases engagement by 40%</li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" data-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary">Update Photos</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+<script>
+// Analytics specific functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize charts
+    initAnalyticsCharts();
+    
+    // Timeframe selectors
+    document.querySelectorAll('.chart-timeframe').forEach(select => {
+        select.addEventListener('change', function() {
+            updateChartData(this.id, this.value);
+        });
+    });
+    
+    // Photo optimization button
+    document.querySelector('button:contains("Optimize Photos")')?.addEventListener('click', function() {
+        document.getElementById('photo-modal').style.display = 'flex';
+    });
+    
+    // Progress circles
+    document.querySelectorAll('.progress-circle').forEach(circle => {
+        const percent = circle.getAttribute('data-percent');
+        circle.style.background = `conic-gradient(#ff4757 ${percent}%, #e9ecef ${percent}% 100%)`;
+    });
+});
+
+function initAnalyticsCharts() {
+    // Profile Views Chart
+    const viewsCtx = document.getElementById('viewsChart').getContext('2d');
+    window.viewsChart = new Chart(viewsCtx, {
+        type: 'line',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Profile Views',
+                data: [45, 52, 48, 65, 72, 58, 63],
+                borderColor: '#ff4757',
+                backgroundColor: 'rgba(255, 71, 87, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: getChartOptions('Profile Views per Day')
+    });
+
+    // Likes vs Matches Chart
+    const likesCtx = document.getElementById('likesChart').getContext('2d');
+    window.likesChart = new Chart(likesCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [
+                {
+                    label: 'Likes Received',
+                    data: [18, 22, 15, 20],
+                    backgroundColor: '#ff4757'
+                },
+                {
+                    label: 'Matches',
+                    data: [8, 10, 6, 9],
+                    backgroundColor: '#5352ed'
+                }
+            ]
+        },
+        options: getChartOptions('Likes vs Matches')
+    });
+
+    // Response Rate Chart
+    const responseCtx = document.getElementById('responseChart').getContext('2d');
+    window.responseChart = new Chart(responseCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Replied', 'No Reply'],
+            datasets: [{
+                data: [68, 32],
+                backgroundColor: ['#ff4757', '#e9ecef'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                title: {
+                    display: true,
+                    text: 'Response Rate'
+                }
+            }
+        }
+    });
+
+    // Demographic Chart
+    const demographicCtx = document.getElementById('demographicChart').getContext('2d');
+    window.demographicChart = new Chart(demographicCtx, {
+        type: 'polarArea',
+        data: {
+            labels: ['25-30', '30-35', '35-40', '40+'],
+            datasets: [{
+                data: [45, 30, 15, 10],
+                backgroundColor: [
+                    '#ff4757',
+                    '#5352ed',
+                    '#ffa502',
+                    '#2ed573'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                title: {
+                    display: true,
+                    text: 'Age Distribution'
+                }
+            }
+        }
+    });
+}
+
+function getChartOptions(title) {
+    return {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            title: {
+                display: true,
+                text: title
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    };
+}
+
+function updateChartData(chartId, timeframe) {
+    // In a real app, this would fetch new data from the server
+    console.log(`Updating ${chartId} with timeframe: ${timeframe}`);
+    
+    // Simulate data update
+    const newData = generateRandomData(7); // 7 data points
+    
+    switch(chartId) {
+        case 'views-timeframe':
+            window.viewsChart.data.datasets[0].data = newData;
+            window.viewsChart.update();
+            break;
+        case 'likes-timeframe':
+            window.likesChart.data.datasets[0].data = newData;
+            window.likesChart.data.datasets[1].data = newData.map(x => x * 0.5);
+            window.likesChart.update();
+            break;
+    }
+}
+
+function generateRandomData(length) {
+    return Array.from({length}, () => Math.floor(Math.random() * 100) + 20);
+}
+
+// Close modals
+document.querySelectorAll('.modal-close, [data-dismiss="modal"]').forEach(btn => {
+    btn.addEventListener('click', function() {
+        this.closest('.modal').style.display = 'none';
+    });
+});
+</script>
+{% endblock %}

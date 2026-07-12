@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Discover - Find Your Perfect Match{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/discover.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="discover-section">
+    <div class="container">
+        <div class="discover-header animate-fade-in">
+            <h1>Discover</h1>
+            <div class="discover-filters">
+                <button class="btn btn-outline filter-btn" data-toggle="modal" data-target="#filterModal">
+                    <i class="fas fa-sliders-h"></i> Filters
+                </button>
+                <div class="filter-pills">
+                    <span class="filter-pill">Age: 18-35 <i class="fas fa-times"></i></span>
+                    <span class="filter-pill">Distance: 50km <i class="fas fa-times"></i></span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="discovery-container" class="discovery-container">
+            <!-- Profile cards will be loaded here by discover.js -->
+        </div>
+    </div>
+</section>
+
+<!-- Filter Modal -->
+<div class="modal" id="filterModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Discovery Preferences</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="filter-form">
+                    <div class="form-group">
+                        <label>I'm interested in</label>
+                        <div class="gender-options">
+                            <label class="gender-option">
+                                <input type="radio" name="genderPreference" value="women">
+                                <span>Women</span>
+                            </label>
+                            <label class="gender-option">
+                                <input type="radio" name="genderPreference" value="men">
+                                <span>Men</span>
+                            </label>
+                            <label class="gender-option">
+                                <input type="radio" name="genderPreference" value="all" checked>
+                                <span>Everyone</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Age range</label>
+                        <div class="range-slider">
+                            <div class="range-values">
+                                <span id="age-min">18</span> - <span id="age-max">40</span>
+                            </div>
+                            <div class="double-slider">
+                                <input type="range" id="age-range-min" min="18" max="70" value="18" class="slider">
+                                <input type="range" id="age-range-max" min="18" max="70" value="40" class="slider">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Maximum distance</label>
+                        <div class="range-slider">
+                            <div class="range-value">
+                                <span id="distance-value">50</span> km
+                            </div>
+                            <input type="range" id="distance-range" min="1" max="100" value="50" class="slider">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Looking for</label>
+                        <div class="relationship-options">
+                            <label class="relationship-option">
+                                <input type="radio" name="relationshipType" value="casual">
+                                <span>Casual</span>
+                            </label>
+                            <label class="relationship-option">
+                                <input type="radio" name="relationshipType" value="relationship">
+                                <span>Relationship</span>
+                            </label>
+                            <label class="relationship-option">
+                                <input type="radio" name="relationshipType" value="any" checked>
+                                <span>Open to either</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Interests</label>
+                        <div class="interests-container">
+                            <div class="interest-tag selected">Travel</div>
+                            <div class="interest-tag">Music</div>
+                            <div class="interest-tag selected">Fitness</div>
+                            <div class="interest-tag">Art</div>
+                            <div class="interest-tag">Food</div>
+                            <div class="interest-tag selected">Movies</div>
+                            <div class="interest-tag">Reading</div>
+                            <div class="interest-tag">Gaming</div>
+                            <div class="interest-tag">Sports</div>
+                            <div class="interest-tag">Photography</div>
+                            <div class="interest-tag">Technology</div>
+                            <div class="interest-tag">Nature</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-gradient" id="apply-filters">Apply Filters</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/discover.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script>
+    // Initialize modal functionality for the filter modal
+    document.addEventListener('DOMContentLoaded', function() {
+        // Filter button click handler
+        const filterBtn = document.querySelector('.filter-btn');
+        if (filterBtn) {
+            filterBtn.addEventListener('click', function() {
+                const modal = document.getElementById('filterModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    setTimeout(() => modal.classList.add('show'), 10);
+                }
+            });
+        }
+        
+        // Close button handler
+        const closeBtn = document.querySelector('#filterModal .close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                const modal = document.getElementById('filterModal');
+                if (modal) {
+                    modal.classList.remove('show');
+                    setTimeout(() => modal.style.display = 'none', 300);
+                }
+            });
+        }
+        
+        // Click outside to close
+        const modal = document.getElementById('filterModal');
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                    setTimeout(() => modal.style.display = 'none', 300);
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
