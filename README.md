@@ -181,19 +181,7 @@ http://127.0.0.1:5000
 
 ---
 
-# 📸 Screenshots
 
-Add screenshots of:
-
-- Home Page
-- Login Page
-- Registration Page
-- Dashboard
-- User Profile
-- Travel Matching
-- AI Assistant
-- Chat Page
-- Admin Dashboard
 
 ---
 
